@@ -1,0 +1,10 @@
+{
+  "Parameters": {
+    "BackofficeURL": "https://backoffice.exness-dev.com/",
+    "BackofficeUserName" : "automation.test@reveeve.com",
+    "BackofficeUserPassword" : "Aa!12345",
+    "Executor": "deviceFarm",
+    "TestClientId": "",
+    "BaseRestApi": ""
+  }
+}

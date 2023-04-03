@@ -1,0 +1,25 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - |
+        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+        @exness:registry=https://registry.npmjs.org/
+        always-auth=true
+        //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+        @exness:registry=https://npm.pkg.github.com" > .npmrc
+      - npm install --unsafe-perm
+      - npm run build
+      - npm test -- -u -t=${TEST_SET_NAME}
+      - date=$(date '+%Y-%m-%d-%H-%M-%S')
+      - |
+        curl -F file=@test-report.html -F "initial_comment=* :white_check_mark: Acceptance Testing - Results* | Request Sender: *${REQUEST_SENDER}* | TestCase: *${TEST_SET_NAME}* | Stage: *${STAGE}*" -F filename="report-${date}-${REQUEST_SENDER}.html" -F channels=${SLACK_CHANNEL_ID} -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" https://slack.com/api/files.upload
+    finally:
+      - echo $CODEBUILD_BUILD_SUCCEEDING
+      - date=$(date '+%Y-%m-%d-%H-%M-%S')
+      - |
+        if [ $CODEBUILD_BUILD_SUCCEEDING -eq 0  ]; then
+          curl -F file=@test-report.html -F "initial_comment=* :x: Acceptance Testing - Results* | Request Sender: *${REQUEST_SENDER}* | TestCase: *${TEST_SET_NAME}* | Stage: *${STAGE}* | Status: *Failed*" -F filename="report-${date}-${REQUEST_SENDER}.html" -F channels=${SLACK_CHANNEL_ID} -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" https://slack.com/api/files.upload
+        fi

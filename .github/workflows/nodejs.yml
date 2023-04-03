@@ -1,0 +1,35 @@
+name: Node.js CI
+
+on:
+  pull_request:
+    branches: [dev, master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          @exness:registry=https://registry.npmjs.org/
+          always-auth=true
+          //npm.pkg.github.com/:_authToken=${{ secrets.READ_PACKAGE_TOKEN }}
+          @exness:registry=https://npm.pkg.github.com" > ${{ github.workspace }}/.npmrc
+      - run: npm install
+      - run: npm run build --if-present
+      - run: npm run lint --if-present
+
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

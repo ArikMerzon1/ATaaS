@@ -1,0 +1,71 @@
+{
+  "$id": "event.testSuite.failed.v1.json",
+  "title": "Event Test Suite Failed",
+  "description": "The test for the given strategy has failed",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {},
+  "type": "object",
+  "required": ["attributes", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "attributes": {
+      "type": "object",
+      "required": ["clientId", "messageType", "messageVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "messageType": {
+          "type": "string",
+          "description": "Fully qualified message type",
+          "pattern": "^event\\.testSuite\\.failed$"
+        },
+        "messageVersion": {
+          "type": "string",
+          "pattern": "1"
+        },
+        "messageId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "correlationId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "prevMessageId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "emitTime": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testSuiteId"],
+      "properties": {
+        "testSuiteId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "testCaseName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "resultDetailsString": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prefix": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
