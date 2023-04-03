@@ -27,7 +27,7 @@ class ApiTests extends AbstractTestBase {
   async ApiCreateUserTest(): Promise<void> {
     const user = {
       attributes: {
-        email: `arik.merzon+${Helpers.getRandomNumberBetween(10, 1000000)}@receeve.com`,
+        email: `arik.merzon+${Helpers.getRandomNumberBetween(10, 1000000)}@exness.com`,
         name: "test_name",
         family_name: "test_family",
         email_verified: "true",

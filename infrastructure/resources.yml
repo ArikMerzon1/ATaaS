@@ -78,7 +78,7 @@ Parameters:
     Default: githubTokenForCiCd
   GithubRepositoryUrl:
     Type: String
-    Default: https://github.com/receeve-gmbh/ATaaS.git
+    Default: https://github.com/exness/ATaaS.git
   SlackChannelID:
     Type: String
   GithubRepositoryBranch:
@@ -228,7 +228,7 @@ Resources:
             Value: !Ref TestClientId
           - Name: REQUEST_SENDER
             Type: PLAINTEXT
-            Value: receeve
+            Value: exness
           - Name: SLACK_CHANNEL_ID
             Type: PLAINTEXT
             Value: !Ref SlackChannelID

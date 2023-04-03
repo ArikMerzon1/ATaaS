@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { container, inject, injectable } from "tsyringe";
 import { SNS } from "aws-sdk";
-import { MessageEmitter } from "@receeve-gmbh/emit-message";
+import { MessageEmitter } from "@exness/emit-message";
 import AccountQueries from "../restClientQueries/AccountQueries";
 import Helpers from "../utils/helpers";
 import ClaimQueries from "../restClientQueries/ClaimQueries";

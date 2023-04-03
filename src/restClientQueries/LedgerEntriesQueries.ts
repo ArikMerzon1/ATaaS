@@ -11,7 +11,7 @@ export default class LedgerEntriesQueries {
 
   /**
    * Add Account Ledger Entries
-   * @see https://receeve.atlassian.net/wiki/spaces/TEC/pages/164200797/Account+Level+Collections
+   * @see https://exness.atlassian.net/wiki/spaces/TEC/pages/164200797/Account+Level+Collections
    * */
   async addAccountLedgerEntries(accountReference: string, ledgerEntryReference: string, amount: number, dueDate: IDueDate): Promise<string> {
     console.log("addAccountLedgerEntries");
@@ -43,7 +43,7 @@ export default class LedgerEntriesQueries {
 
   /**
    * Delete the Ledger Entry
-   * @see https://receeve.atlassian.net/wiki/spaces/TEC/pages/541687818/Delete+Claims+from+Ledger+Entries
+   * @see https://exness.atlassian.net/wiki/spaces/TEC/pages/541687818/Delete+Claims+from+Ledger+Entries
 
    * */
   async deleteAccountLedgerEntries(accountReference: string, ledgerEntryReference: string): Promise<string> {

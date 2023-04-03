@@ -1,5 +1,5 @@
-import logger from "@receeve-gmbh/logger";
-import { Handler } from "@receeve-gmbh/sqs-handler";
+import logger from "@exness/logger";
+import { Handler } from "@exness/sqs-handler";
 
 import { QueryTestSuiteGet } from "../../types/query.testSuite.get.v1";
 import ITestSuiteDefinitionDAO from "../dao/ITestSuiteDefinitionDAO";

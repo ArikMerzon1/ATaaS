@@ -1,8 +1,8 @@
-import { IMessageEmitter } from "@receeve-gmbh/emit-message";
-import { QueryEventsGet } from "@receeve-gmbh/reporting-events-api/query.events.get.v1";
-import { EventsReponse } from "@receeve-gmbh/reporting-backoffice-api";
-import QueryEventsGetSchema from "@receeve-gmbh/reporting-events-api/query.events.get.v1.json";
-import logger from "@receeve-gmbh/logger";
+import { IMessageEmitter } from "@exness/emit-message";
+import { QueryEventsGet } from "@exness/reporting-events-api/query.events.get.v1";
+import { EventsReponse } from "@exness/reporting-backoffice-api";
+import QueryEventsGetSchema from "@exness/reporting-events-api/query.events.get.v1.json";
+import logger from "@exness/logger";
 import { inject, injectable } from "tsyringe";
 
 const log = logger("services:EventEmitter");

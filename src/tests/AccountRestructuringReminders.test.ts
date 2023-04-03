@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { suite, test, timeout } from "@testdeck/jest";
-import { ClaimWithStatus } from "@receeve-gmbh/account-api/ClaimDTO";
-import { AccountRestructuringNotificationSchedule } from "@receeve-gmbh/account-api/AccountRestructuringNotificationSchedule";
+import { ClaimWithStatus } from "@exness/account-api/ClaimDTO";
+import { AccountRestructuringNotificationSchedule } from "@exness/account-api/AccountRestructuringNotificationSchedule";
 
 import { SidebarMenuEnum, AccountsSubMenu } from "../utils/Enums";
 import AbstractTestBase from "./AbstractTestBase";

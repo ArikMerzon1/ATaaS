@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { Claim } from "@receeve-gmbh/account-api/Claim";
+import { Claim } from "@exness/account-api/Claim";
 import { AWSError, DynamoDB, SNS } from "aws-sdk";
 import { PromiseResult } from "aws-sdk/lib/request";
 

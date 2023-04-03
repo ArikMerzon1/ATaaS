@@ -1,9 +1,9 @@
-import { ReferencedSchemas } from "@receeve-gmbh/emit-message";
+import { ReferencedSchemas } from "@exness/emit-message";
 
-import ClaimSchema from "@receeve-gmbh/account-api/Claim.json";
-import DebtorSchema from "@receeve-gmbh/account-api/Debtor.json";
-import RepaymentSchema from "@receeve-gmbh/account-api/Repayment.json";
-import ClaimOriginationSchema from "@receeve-gmbh/account-api/ClaimOrigination.json";
+import ClaimSchema from "@exness/account-api/Claim.json";
+import DebtorSchema from "@exness/account-api/Debtor.json";
+import RepaymentSchema from "@exness/account-api/Repayment.json";
+import ClaimOriginationSchema from "@exness/account-api/ClaimOrigination.json";
 import TestSuiteSchema from "../../apiMessages/TestSuite.json";
 
 export default function getRefSchemas(): ReferencedSchemas {

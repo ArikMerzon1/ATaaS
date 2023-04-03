@@ -3,7 +3,7 @@ import { suite, test, timeout } from "@testdeck/jest";
 import { By } from "selenium-webdriver";
 import assert from "assert";
 import { container } from "tsyringe";
-import { ClaimDTO } from "@receeve-gmbh/account-api/ClaimDTO";
+import { ClaimDTO } from "@exness/account-api/ClaimDTO";
 import { AccountsSubMenu, ConfigurationSubMenu, SidebarMenuEnum, StrategyActions, StrategySubMenu, UserRoleBackoffice } from "../utils/Enums";
 import { ClaimOverviewPageObject } from "../pageObjects/insights/ClaimOverviewPageObject";
 import AbstractTestBase from "./AbstractTestBase";
@@ -19,7 +19,7 @@ class UITests extends AbstractTestBase {
   @timeout(AbstractTestBase.timeOut)
   async backofficeLoginWithInvalidCredentials(): Promise<void> {
     const backoffice = await this.withWebDriver();
-    const errorMessage = await backoffice.LoginPage().LoginWithInvalidUserName("INVALID_USER@receeve.com");
+    const errorMessage = await backoffice.LoginPage().LoginWithInvalidUserName("INVALID_USER@exness.com");
 
     await expect(errorMessage).toContain("User does not exist.");
 
@@ -267,7 +267,7 @@ class UITests extends AbstractTestBase {
       await roleManagement.setPermissions(roles);
 
       await backoffice.Logout();
-      await backoffice.LoginPage().Login("arik.merzon+agent@receeve.com", "Aa!12345");
+      await backoffice.LoginPage().Login("arik.merzon+agent@exness.com", "Aa!12345");
 
       await helpers.takeScreenshot("prop");
     });

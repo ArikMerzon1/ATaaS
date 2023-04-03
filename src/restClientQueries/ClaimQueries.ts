@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import dummyJson from "dummy-json";
-import { Claim, Debtor } from "@receeve-gmbh/account-api/Claim";
+import { Claim, Debtor } from "@exness/account-api/Claim";
 import { HttpProvider } from "../utils/httpProvider";
 import Helpers from "../utils/helpers";
 

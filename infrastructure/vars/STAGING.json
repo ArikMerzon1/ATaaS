@@ -1,6 +1,6 @@
 {
   "Parameters": {
-    "BackofficeURL": "https://backoffice.receeve-staging.com/",
+    "BackofficeURL": "https://backoffice.exness-staging.com/",
     "BackofficeUserName" : "automation.test@reveeve.com",
     "BackofficeUserPassword" : "Aa!12345",
     "Executor": "deviceFarm",

@@ -1,15 +1,15 @@
 import { injectable } from "tsyringe";
 import { SNS } from "aws-sdk";
-import { MessageEmitter } from "@receeve-gmbh/emit-message";
-import logger from "@receeve-gmbh/logger";
+import { MessageEmitter } from "@exness/emit-message";
+import logger from "@exness/logger";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import dummyJson from "dummy-json";
 
-import { CommandClaimCreate } from "@receeve-gmbh/account-api/cmd.claim.create.v1";
-import CommandClaimCreateSchema from "@receeve-gmbh/account-api/cmd.claim.create.v1.json";
+import { CommandClaimCreate } from "@exness/account-api/cmd.claim.create.v1";
+import CommandClaimCreateSchema from "@exness/account-api/cmd.claim.create.v1.json";
 
-import { isValidBySpec, getErrorsBySpec } from "@receeve-gmbh/validate";
+import { isValidBySpec, getErrorsBySpec } from "@exness/validate";
 
 import getRefSchemas from "./getRefSchemas";
 import helpers from "./helpers";

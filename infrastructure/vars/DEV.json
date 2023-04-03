@@ -1,6 +1,6 @@
 {
   "Parameters": {
-    "BackofficeURL"                           : "https://backoffice.receeve-dev.com/",
+    "BackofficeURL"                           : "https://backoffice.exness-dev.com/",
     "BackofficeUserName"                      : "automation.test@reveeve.com",
     "BackofficeUserPassword"                  : "Aa!12345",
     "SlackChannelID"                          : "C036BPF3UCT",
@@ -8,7 +8,7 @@
     "Browser"                                 : "firefox",
     "Headless"                                : "false",
     "TestClientId"                            : "3d132b18-6b6f-4f7c-b464-6a8ee7ca5235",
-    "BaseRestApi"                             : "https://api.receeve-dev.com/v1/",
+    "BaseRestApi"                             : "https://api.exness-dev.com/v1/",
     "Authorization"                           : "Basic NGExdm42azRhYzRocDV1dTNxMnF2dTRjZ2M6MTE5NXVpdjlzdWI0Z2tjZ2RsOHRpb2UyMDlsdmNtdml2dTU1YjFlZjYwcjdsaDJtbGZmdA==",
     "AwsAccessKeyId"                          : "AKIARL5M7FY75Q6MNVEA",
     "AwsSecretAccessKey"                      : "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",

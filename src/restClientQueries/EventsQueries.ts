@@ -1,5 +1,5 @@
 import { container, inject, injectable } from "tsyringe";
-import { Message } from "@receeve-gmbh/emit-message";
+import { Message } from "@exness/emit-message";
 import { HttpProvider } from "../utils/httpProvider";
 import Helpers from "../utils/helpers";
 import EventList from "./EventList";

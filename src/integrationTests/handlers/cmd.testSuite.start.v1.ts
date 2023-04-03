@@ -1,11 +1,11 @@
-import logger from "@receeve-gmbh/logger";
-import { Handler } from "@receeve-gmbh/sqs-handler";
-import { IMessageEmitter } from "@receeve-gmbh/emit-message";
-import { Claim } from "@receeve-gmbh/account-api/Claim";
-import { CommandClaimCreate } from "@receeve-gmbh/account-api/cmd.claim.create.v1";
-import CommandClaimCreateSchema from "@receeve-gmbh/account-api/cmd.claim.create.v1.json";
-import { CommandMessageSchedule } from "@receeve-gmbh/message-scheduler-api/cmd.message.schedule.v1";
-import CommandMessageScheduleSchema from "@receeve-gmbh/message-scheduler-api/cmd.message.schedule.v1.json";
+import logger from "@exness/logger";
+import { Handler } from "@exness/sqs-handler";
+import { IMessageEmitter } from "@exness/emit-message";
+import { Claim } from "@exness/account-api/Claim";
+import { CommandClaimCreate } from "@exness/account-api/cmd.claim.create.v1";
+import CommandClaimCreateSchema from "@exness/account-api/cmd.claim.create.v1.json";
+import { CommandMessageSchedule } from "@exness/message-scheduler-api/cmd.message.schedule.v1";
+import CommandMessageScheduleSchema from "@exness/message-scheduler-api/cmd.message.schedule.v1.json";
 
 import moment from "moment";
 import { v4 as uuidV4 } from "uuid";

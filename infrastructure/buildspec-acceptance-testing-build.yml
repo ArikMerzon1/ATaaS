@@ -6,10 +6,10 @@ phases:
     commands:
       - |
         echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}
-        @receeve:registry=https://registry.npmjs.org/
+        @exness:registry=https://registry.npmjs.org/
         always-auth=true
         //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-        @receeve-gmbh:registry=https://npm.pkg.github.com" > .npmrc
+        @exness:registry=https://npm.pkg.github.com" > .npmrc
       - npm install --unsafe-perm
       - npm run build
       - npm test -- -u -t=${TEST_SET_NAME}

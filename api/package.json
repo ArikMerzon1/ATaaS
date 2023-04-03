@@ -1,5 +1,5 @@
 {
-  "name": "@receeve-gmbh/ataas",
+  "name": "@exness/ataas",
   "version": "1.13.3",
   "scripts": {
     "prepare": "npm run copy:sources",
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/receeve-gmbh/ATaaS.git"
+    "url": "git+ssh://git@github.com/exness/ATaaS.git"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +25,7 @@
   },
   "preferGlobal": true,
   "bugs": {
-    "url": "https://github.com/receeve-gmbh/ATaaS/issues"
+    "url": "https://github.com/exness/ATaaS/issues"
   },
-  "homepage": "https://github.com/receeve-gmbh/ATaaS#readme"
+  "homepage": "https://github.com/exness/ATaaS#readme"
 }

@@ -1,6 +1,6 @@
 import dummyJson from "dummy-json";
 import { inject, injectable } from "tsyringe";
-import { ClaimWithStatus } from "@receeve-gmbh/account-api/ClaimDTO";
+import { ClaimWithStatus } from "@exness/account-api/ClaimDTO";
 
 import Helpers from "../utils/helpers";
 import { HttpProvider } from "../utils/httpProvider";

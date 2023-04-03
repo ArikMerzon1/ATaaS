@@ -1,4 +1,4 @@
-import logger from "@receeve-gmbh/logger";
+import logger from "@exness/logger";
 import { DocumentClient } from "aws-sdk/lib/dynamodb/document_client";
 
 import ITestSuiteDefinitionDAO from "./ITestSuiteDefinitionDAO";
@@ -27,7 +27,7 @@ export default class DynamoTestSuiteDefinitionDAO implements ITestSuiteDefinitio
     const { testSuiteId, ...patch } = data;
     console.log("Updating test suite definition", { clientId, data });
 
-    // Ref: https://github.com/receeve-gmbh/LandingPage/blob/master/ReadSide/src/dao/ReadSideDynamoDAO.ts
+    // Ref: https://github.com/exness/LandingPage/blob/master/ReadSide/src/dao/ReadSideDynamoDAO.ts
     let updateExpressionString = "SET";
     const expressionAttributeNames: { [s: string]: string } = {};
     const expressionAttributeValues: { [s: string]: string } = {};

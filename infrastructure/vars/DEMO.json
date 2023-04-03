@@ -1,11 +1,11 @@
 {
   "Parameters": {
-    "BackofficeURL": "https://backoffice.receeve-demo.com/",
+    "BackofficeURL": "https://backoffice.exness-demo.com/",
     "BackofficeUserName" : "automation.test@reveeve.com",
     "BackofficeUserPassword" : "Aa!12345",
     "Executor": "deviceFarm",
     "TestClientId": "0634543a-b912-45df-8860-000000000001",
-    "BaseRestApi": "https://api.receeve-demo.com/v1/",
+    "BaseRestApi": "https://api.exness-demo.com/v1/",
     "Authorization":
     "Basic MWEwam5icGp2ZGJ2aDhzcGRjaDNmMW5tY2U6MWJibGU5OWVyZTl2ZGI2ZDBpa2JicjZxYWhhZjNka25kZHVmbW40cWNqamtsNGdoaW5ocA=="
   }

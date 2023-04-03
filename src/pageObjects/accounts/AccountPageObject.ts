@@ -1,4 +1,4 @@
-import { AccountRestructuringNotificationSchedule } from "@receeve-gmbh/account-api/AccountRestructuringNotificationSchedule";
+import { AccountRestructuringNotificationSchedule } from "@exness/account-api/AccountRestructuringNotificationSchedule";
 import { inject, injectable } from "tsyringe";
 import { By, ThenableWebDriver } from "selenium-webdriver";
 import helpers from "../../utils/helpers";
