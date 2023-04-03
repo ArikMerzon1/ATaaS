@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+  post_build:
+    commands:
+      - >
+        aws cloudformation package
+        --template-file ./infrastructure/resources.yml
+        --output-template-file ./resources-processed.yml
+        --s3-bucket $PIPELINES_BUCKET
+        --s3-prefix $SERVICE_NAME
+artifacts:
+  files:
+    - ./package.json
+    - ./infrastructure/resources.yml
+    - ./resources-processed.yml
+    - ./infrastructure/vars/*

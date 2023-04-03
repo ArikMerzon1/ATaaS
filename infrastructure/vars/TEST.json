@@ -1,0 +1,17 @@
+{
+  "Parameters": {
+    "BackofficeURL": "https://backoffice.receeve-test.com/",
+    "BackofficeUserName" : "automation.test@reveeve.com",
+    "BackofficeUserPassword" : "Aa!12345",
+    "GithubRepositoryBranch": "feature/PDN-1473-slack-bot",
+    "SlackChannelID": "C036BPF3UCT",
+    "Executor": "deviceFarm",
+    "TestClientId": "398851c6-c15f-420f-9bd5-421170eec0df",
+    "BaseRestApi": "https://api.receeve-test.com/v1/",
+    "Authorization": "",
+    "AwsAccessKeyId": "",
+    "AwsSecretAccessKey": "",
+    "AwsDfArn": "",
+    "UserPoolId": ""
+  }
+}

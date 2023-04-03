@@ -1,0 +1,36 @@
+actor User
+participant "<b>Acceptance Test" as AT #darkgray
+participant "Message Scheduler" as MS
+participant "Strategy Core" as SC
+participant "Account Claim" as AC
+
+AT <- User: **cmd.testSuite.set**
+activate AT
+AT -> AT: Save Test Suite definition
+AT --> User
+deactivate AT
+...
+== Test Suite Start ==
+AT <- User: **cmd.testSuite.start**
+activate AT
+AT -> AT: Find Test Suite definition
+AT -> AT: Save **//p//** Running Test Suite steps\nwhere **//p//** is the total number of steps from\neach test case
+AT -> AC: **cmd.claim.create** for **//n//** test cases
+AT -> MS: **cmd.message.schedule**\n//for cmd.testSuite.check after//\n//Test Suite timeout//
+AT --> User
+deactivate AT
+...
+== Strategy Step Execution ==
+AT <- SC: **event.testSuite.executed**\n//from Strategy Core//
+activate AT
+AT -> AT: Find running Test Suite step\nand set //hasBeenReached// to true
+AT -> AT: Update running Test Suite step
+AT --> SC
+deactivate AT
+...
+== Test Suite Timeout ==
+AT <- MS: **cmd.testSuite.check**
+activate AT
+AT -> User: **event.testSuite.succeeded**\nor\n**event.testSuite.failed**
+AT --> MS
+deactivate AT

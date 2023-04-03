@@ -1,0 +1,83 @@
+{
+  "$id": "TestSuite.json",
+  "title": "Test Suite",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {},
+  "type": "object",
+  "required": [
+    "testSuiteId",
+    "name",
+    "timeout",
+    "claim",
+    "testCases"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "testSuiteId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timeout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "milliseconds": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "seconds": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "minutes": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "hours": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "days": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "weeks": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "months": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "quarters": {
+          "type": "integer",
+          "minumum": 1
+        },
+        "years": {
+          "type": "integer",
+          "minumum": 1
+        }
+      }
+    },
+    "claim": {
+      "type": "object"
+    },
+    "testCases": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "additionalProperties": false,
+        "items": {
+          "type": "string",
+          "minLength": 1,
+          "minItems": 1
+        }
+      }
+    }
+  }
+}

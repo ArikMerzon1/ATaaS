@@ -1,0 +1,290 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Resources for ATaaS
+
+Parameters:
+  LogLevel:
+    Type: String
+  Password:
+    Type: String
+  SoftTimeOutInSec:
+    Type: String
+  DefinitionTableName:
+    Type: String
+  RunningTableName:
+    Type: String
+  CacheKeyPrefix:
+    Type: String
+  BaseQueue:
+    Type: String
+  DeadLetterQueue:
+    Type: String
+  NotificationsBus:
+    Type: String
+  DuplicationPreventionLayerRedisEndpoint:
+    Type: String
+  LambdaUsername:
+    Type: String
+  LambdaKey:
+    Type: String
+  LambdaGridHost:
+    Type: String
+  MessageBus:
+    Type: String
+  AWSDefaultRegion:
+    Type: String
+  Headless:
+    Type: String
+  Browser:
+    Type: String
+  UserPoolId:
+    Type: String
+  AwsAccessKeyId:
+    Type: String
+  AwsSecretAccessKey:
+    Type: String
+  AwsDfArn:
+    Type: String
+  Stage:
+    Type: String
+  ServiceName:
+    Type: String
+  MainEventBusSnsTopicArn:
+    Type: AWS::SSM::Parameter::Value<String>
+  ErrorAlarmNotificationTopicArn:
+    Type: AWS::SSM::Parameter::Value<String>
+  BackofficeURL:
+    Type: String
+  BackofficeUserName:
+    Type: String
+  BackofficeUserPassword:
+    Type: String
+  TestExecutor:
+    Type: String
+  TestClientId:
+    Type: String
+  BaseRestApi:
+    Type: String
+  Authorization:
+    Type: String
+  NPMToken:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: npmAuthenticationToken
+  SlackSigningSecretToken:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: slackSigningSecretToken
+  GitHubToken:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: githubTokenForCiCd
+  GithubRepositoryUrl:
+    Type: String
+    Default: https://github.com/receeve-gmbh/ATaaS.git
+  SlackChannelID:
+    Type: String
+  GithubRepositoryBranch:
+    Type: String
+    Default: dev
+    Description: the branch name for DEV pipeline, to which listener on Push will be connected
+
+Resources:
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Path: /
+  CodeBuildRolePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: root
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Resource: "*"
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+              - ssm:GetParameters
+      Roles:
+        - Ref: CodeBuildRole
+
+  CodeBuildSourceCredential:
+    Type: AWS::CodeBuild::SourceCredential
+    Properties:
+      Token: !Ref GitHubToken
+      ServerType: GITHUB
+      AuthType: PERSONAL_ACCESS_TOKEN
+
+  AcceptanceTestingCodeBuild:
+    Type: AWS::CodeBuild::Project
+    DependsOn: CodeBuildSourceCredential
+    Properties:
+      Name: !Sub ${ServiceName}-AcceptanceTesting-${Stage}
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_MEDIUM
+        Image: aws/codebuild/standard:5.0
+        Type: LINUX_CONTAINER
+        EnvironmentVariables:
+          - Name: DUPLICATION_PREVENTION_LAYER_REDIS_ENDPOINT
+            Type: PLAINTEXT
+            Value: !Ref DuplicationPreventionLayerRedisEndpoint
+          - Name: PASSWORD
+            Type: PLAINTEXT
+            Value: !Ref Password
+          - Name: NOTIFICATION_BUS
+            Type: PLAINTEXT
+            Value: !Ref NotificationsBus
+          - Name: DEAD_LETTER_QUEUE
+            Type: PLAINTEXT
+            Value: !Ref DeadLetterQueue
+          - Name: BASE_QUEUE
+            Type: PLAINTEXT
+            Value: !Ref BaseQueue
+          - Name: CACHE_KEY_PREFIX
+            Type: PLAINTEXT
+            Value: !Ref CacheKeyPrefix
+          - Name: RUNNING_TABLE_NAME
+            Type: PLAINTEXT
+            Value: !Ref RunningTableName
+          - Name: DEFINITION_TABLE_NAME
+            Type: PLAINTEXT
+            Value: !Ref DefinitionTableName
+          - Name: SOFT_TIMEOUT_IN_SEC
+            Type: PLAINTEXT
+            Value: !Ref SoftTimeOutInSec
+          - Name: LOG_LEVEL
+            Type: PLAINTEXT
+            Value: !Ref LogLevel
+          - Name: LAMBDA_USERNAME
+            Type: PLAINTEXT
+            Value: !Ref LambdaUsername
+          - Name: LAMBDA_KEY
+            Type: PLAINTEXT
+            Value: !Ref LambdaKey
+          - Name: LAMBDA_GRID_HOST
+            Type: PLAINTEXT
+            Value: !Ref LambdaGridHost
+          - Name: MESSAGE_BUS
+            Type: PLAINTEXT
+            Value: !Ref MessageBus
+          - Name: AWS_DEFAULT_REGION
+            Type: PLAINTEXT
+            Value: !Ref AWSDefaultRegion
+          - Name: HEADLESS
+            Type: PLAINTEXT
+            Value: !Ref Headless
+          - Name: USER_POOL_ID
+            Type: PLAINTEXT
+            Value: !Ref UserPoolId
+          - Name: BROWSER
+            Type: PLAINTEXT
+            Value: !Ref Browser
+          - Name: AWS_ACCESS_KEY_ID
+            Type: PLAINTEXT
+            Value: !Ref AwsAccessKeyId
+          - Name: AWS_SECRET_ACCESS_KEY
+            Type: PLAINTEXT
+            Value: !Ref AwsSecretAccessKey
+          - Name: AWS_DF_ARN
+            Type: PLAINTEXT
+            Value: !Ref AwsDfArn
+          - Name: NPM_TOKEN
+            Type: PARAMETER_STORE
+            Value: npmAuthenticationToken
+          - Name: TEST_SET_NAME
+            Type: PLAINTEXT
+            Value: uitests
+          - Name: BACKOFFICE_BASE_URL
+            Type: PLAINTEXT
+            Value: !Ref BackofficeURL
+          - Name: BACKOFFICE_USERNAME
+            Type: PLAINTEXT
+            Value: !Ref BackofficeUserName
+          - Name: BACKOFFICE_PASSWORD
+            Type: PLAINTEXT
+            Value: !Ref BackofficeUserPassword
+          - Name: TEST_EXECUTOR
+            Type: PLAINTEXT
+            Value: !Ref TestExecutor
+          - Name: BASE_REST_API
+            Type: PLAINTEXT
+            Value: !Ref BaseRestApi
+          - Name: AUTH
+            Type: PLAINTEXT
+            Value: !Ref Authorization
+          - Name: TEST_CLIENT_ID
+            Type: PLAINTEXT
+            Value: !Ref TestClientId
+          - Name: REQUEST_SENDER
+            Type: PLAINTEXT
+            Value: receeve
+          - Name: SLACK_CHANNEL_ID
+            Type: PLAINTEXT
+            Value: !Ref SlackChannelID
+          - Name: STAGE
+            Type: PLAINTEXT
+            Value: !Ref Stage
+          - Name: GITHUB_TOKEN
+            Type: PARAMETER_STORE
+            Value: githubTokenForCiCd
+          - Name: SLACK_BOT_TOKEN
+            Type: PARAMETER_STORE
+            Value: slackTestBotToken
+      ServiceRole: !Ref CodeBuildRole
+      SourceVersion: !Ref GithubRepositoryBranch
+      Source:
+        Type: GITHUB
+        Location: !Ref GithubRepositoryUrl
+        GitCloneDepth: 1
+        GitSubmodulesConfig:
+          FetchSubmodules: False
+        BuildSpec: infrastructure/buildspec-acceptance-testing-build.yml
+
+  SlackBotLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Join [ "-", [ !Ref ServiceName, 'SlackBot', !Ref Stage ] ]
+      CodeUri: ./slackBot
+      Handler: slackBotRequestHandler.handler
+      Runtime: nodejs14.x
+      Timeout: 30
+      MemorySize: 128
+      Environment:
+        Variables:
+          ACCEPTANCE_TESTING_CODEBUILD_PROJECT: !Join [ "-", [ !Ref ServiceName, "AcceptanceTesting" , !Ref Stage ] ]
+          AUTHORIZED_USERS: "['arik.merzon', 'luis.rangel', 'jose.bernard']"
+          AWS_ACCOUNT_ID: !Ref AWS::AccountId
+          SLACK_SIGNING_SECRET: !Ref SlackSigningSecretToken
+      Events:
+        SlackBot:
+          Type: Api
+          Properties:
+            Path: /
+            Method: POST
+        Scheduler:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 1 * * ? *) #every day at 01:00am UTC
+      Policies:
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - codebuild:StartBuild
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: "*"
+
+

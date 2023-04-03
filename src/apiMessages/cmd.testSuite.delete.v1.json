@@ -1,0 +1,59 @@
+{
+  "$id": "cmd.testSuite.delete.v1.json",
+  "title": "Command Test Suite Delete",
+  "description": "Delete Test Suite",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {},
+  "type": "object",
+  "required": ["attributes", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "attributes": {
+      "type": "object",
+      "required": ["clientId", "messageType", "messageVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "messageType": {
+          "type": "string",
+          "description": "Fully qualified message type",
+          "pattern": "^cmd\\.testSuite\\.delete$"
+        },
+        "messageVersion": {
+          "type": "string",
+          "pattern": "1"
+        },
+        "messageId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "correlationId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "prevMessageId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "emitTime": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testSuiteId"],
+      "properties": {
+        "testSuiteId": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ServiceName:
+    Type: String
+    Description: for example - ATaaS
+  GithubRepositoryName:
+    Type: String
+    Description: for example - ATaaS
+
+Resources:
+  PipelineStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://cicd-cloudformation-nested-stacks.s3.eu-central-1.amazonaws.com/GeneralCodePipeline.yaml
+      Parameters:
+        ServiceName: !Ref ServiceName
+        GithubRepositoryName: !Ref GithubRepositoryName
+        DeployToTEST: "true"
+        DeployToDEMO: "false"
+        DeployToPROD: "false"
+        RunIntegrationTests: "false"
+        GithubRepositoryBranchDEV: "dev"

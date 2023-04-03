@@ -1,0 +1,63 @@
+{
+  "$id": "event.testStep.executed.v1.json",
+  "title": "Event Test Step Executed",
+  "description": "A test step has been executed",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {},
+  "type": "object",
+  "required": ["attributes", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "attributes": {
+      "type": "object",
+      "required": ["externalClaimRef", "clientId", "messageType", "messageVersion"],
+      "additionalProperties": false,
+      "properties": {
+        "externalClaimRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "clientId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "messageType": {
+          "type": "string",
+          "description": "Fully qualified message type",
+          "pattern": "^event\\.testStep\\.executed$"
+        },
+        "messageVersion": {
+          "type": "string",
+          "pattern": "1"
+        },
+        "messageId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "correlationId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "prevMessageId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "emitTime": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stepName"],
+      "properties": {
+        "stepName": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

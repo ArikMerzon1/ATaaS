@@ -1,0 +1,40 @@
+{
+  "testSuiteId": "90baec2b-3efc-4e34-8ec4-812f815a396b",
+  "name": "Sends communication",
+  "timeout": { "hours": 2 },
+  "claim": {
+    "amount": 1632670,
+    "currency": "GBP",
+    "totalFees": 26572,
+    "fees": [],
+    "dueDate": "2018-06-18",
+    "externalDueDate": "2018-03-31",
+    "externalPortfolioRef": "portfolio1",
+    "externalClaimRef": "REF-0000",
+    "debtor": {
+      "title": "Mr.",
+      "lastName": "Bond",
+      "middleName": "007",
+      "firstName": "James",
+      "birthday": "1987-06-24",
+      "externalDebtorRef": "4647966",
+      "companyName": "British Secret Service",
+      "contactInformation": {
+        "country": "GB",
+        "city": "London",
+        "addressLine1": "Apt 123",
+        "state": "United Kingdom",
+        "postalCode": "91154",
+        "email": "james@receeve.com",
+        "landLine": "+4915127554465",
+        "mobileNumber": "+4915127554464",
+        "addressLine2": "456 Main Street SE",
+        "additionalAddresses": []
+      }
+    },
+    "meta": { "orderNumber": "43474-000", "meta1": "value_meta1" }
+  },
+  "testCases": {
+    "Sends message": ["Sends email", "Sends SMS"]
+  }
+}
