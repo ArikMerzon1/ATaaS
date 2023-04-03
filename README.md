@@ -1,4 +1,4 @@
-# Acceptance Testing
+# ATaaS - Automation as a service
 
 Automating UI tests helps minimize the time and human effort required to test an application’s UI for regression. Instead of having a tester validate every single aspect of the UI, test scripts are created for corresponding user scenarios. These test scripts can verify the integrity of the project before deployment.
 More references https://exness.atlassian.net/wiki/spaces/QA/pages/235667878/UI+Automation+Service
