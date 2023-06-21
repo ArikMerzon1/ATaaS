@@ -59,7 +59,7 @@ import {
   ClaimBulkActionPayload,
   MutationToStartCaseManagementTaskArgs,
   MutationToMarkCaseManagementTaskActiveArgs,
-} from "@exness/account-backoffice-api";
+} from "@receeve-gmbh/account-backoffice-api";
 
 import { FetchResult } from "@apollo/client/core";
 import { LedgerEntry } from "../../models/ledger";

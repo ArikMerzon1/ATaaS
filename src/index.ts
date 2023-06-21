@@ -1,5 +1,5 @@
-import { handlerDecorator } from "@exness/logger";
-import sqsHandlerFactory from "@exness/sqs-handler";
+import { handlerDecorator } from "@receeve-gmbh/logger";
+import sqsHandlerFactory from "@receeve-gmbh/sqs-handler";
 
 import assembly from "./assembly";
 

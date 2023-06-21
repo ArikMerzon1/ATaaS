@@ -1,25 +1,47 @@
 import { injectable } from "tsyringe";
 import { SNS } from "aws-sdk";
-import { MessageEmitter } from "@exness/emit-message";
-import logger from "@exness/logger";
+import { SNSMessageEmitter } from "@receeve-gmbh/emit-message";
+import logger from "@receeve-gmbh/logger";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import dummyJson from "dummy-json";
 
-import { CommandClaimCreate } from "@exness/account-api/cmd.claim.create.v1";
-import CommandClaimCreateSchema from "@exness/account-api/cmd.claim.create.v1.json";
+import { CommandClaimCreate } from "@receeve-gmbh/account-api/cmd.claim.create.v1";
+import CommandClaimCreateSchema from "@receeve-gmbh/account-api/cmd.claim.create.v1.json";
 
-import { isValidBySpec, getErrorsBySpec } from "@exness/validate";
+import { isValidBySpec, getErrorsBySpec } from "@receeve-gmbh/validate";
 
-import getRefSchemas from "./getRefSchemas";
+import { CommandStrategyReassign } from "@receeve-gmbh/strategy-api/cmd.strategy.reassign.v1";
+import CommandStrategyReassignSchema from "@receeve-gmbh/strategy-api/cmd.strategy.reassign.v1.json";
+import { ClaimListItem } from "@receeve-gmbh/reporting-backoffice-api";
 import helpers from "./helpers";
+import getRefSchemas from "./getRefSchemas";
 
 const sns: SNS = new SNS();
 const log = logger("handlers:GenerateClaims");
 
 injectable();
 export class EventsEmitter {
-  private messageEmitter: MessageEmitter = new MessageEmitter({ sns });
+  private messageEmitter: SNSMessageEmitter = new SNSMessageEmitter({ sns });
+
+  async assignNewStrategy(claimListItem: ClaimListItem, newStrategyId: string): Promise<void> {
+    try {
+      await this.messageEmitter.emit<CommandStrategyReassign>(CommandStrategyReassignSchema, {
+        attributes: {
+          messageType: "cmd.strategy.reassign",
+          messageVersion: "1",
+          clientId: claimListItem.clientId,
+          externalClaimRef: claimListItem.externalClaimRef,
+        },
+        payload: {
+          strategyBlueprintId: newStrategyId,
+          force: true,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async emitClaims(newClaim: CommandClaimCreate): Promise<void> {
     console.log("emitting msg");

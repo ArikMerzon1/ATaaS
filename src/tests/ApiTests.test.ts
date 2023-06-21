@@ -7,6 +7,8 @@ import EventList from "../restClientQueries/EventList";
 import { Events, UserRoleCognito } from "../utils/Enums";
 import { QueryFilters } from "../eventHelper/EventEmitter";
 import { fetchClaimData } from "../utils/graphql/account/account.service";
+import { container } from "tsyringe";
+import { EventsEmitter } from "../utils/EventsEmitter";
 
 @suite("apitests")
 class ApiTests extends AbstractTestBase {
@@ -27,7 +29,7 @@ class ApiTests extends AbstractTestBase {
   async ApiCreateUserTest(): Promise<void> {
     const user = {
       attributes: {
-        email: `arik.merzon+${Helpers.getRandomNumberBetween(10, 1000000)}@exness.com`,
+        email: `arik.merzon+${Helpers.getRandomNumberBetween(10, 1000000)}@receeve.com`,
         name: "test_name",
         family_name: "test_family",
         email_verified: "true",
@@ -88,7 +90,7 @@ class ApiTests extends AbstractTestBase {
     console.log(events.keys());
   }
 
-  @test
+  @test("apitests:EventsTest")
   @timeout(AbstractTestBase.timeOut)
   async EventsTest(): Promise<void> {
     const queryFilters: QueryFilters = {
@@ -100,6 +102,7 @@ class ApiTests extends AbstractTestBase {
     const generator = await this.withRestClient().eventsQueries.getMessages(this.clientId, queryFilters);
     let counter = 0;
     for await (const _message of generator) {
+      console.log(_message, "messages generated");
       counter++;
     }
 
@@ -115,5 +118,16 @@ class ApiTests extends AbstractTestBase {
     });
 
     console.log(claimData);
+  }
+
+  @test
+  @timeout(AbstractTestBase.timeOut)
+  async assignNewStrategyTest(): Promise<void> {
+    const { claimListItem } = await this.withRestClient().claimQueries.createClaim();
+
+    const eventsEmitter = container.resolve(EventsEmitter);
+    const result = await eventsEmitter.assignNewStrategy(claimListItem, "0a3e4187-c83e-4501-a513-ed601fab7fa7");
+
+    console.log(result);
   }
 }

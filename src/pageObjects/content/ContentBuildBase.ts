@@ -15,10 +15,10 @@ export default class ContentBuildBase {
   async switchView(view: LandingPageView): Promise<void> {
     console.log("switchView");
     switch (view) {
-      case LandingPageView.CardView:
+      case LandingPageView.CARD_VIEW:
         await helpers.getElement(By.css(`.button.card-btn`)).then((_) => _.click());
         break;
-      case LandingPageView.ListView:
+      case LandingPageView.LIST_VIEW:
         await helpers.getElement(By.css(`.button.list-btn`)).then((_) => _.click());
         break;
       default:

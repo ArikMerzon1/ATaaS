@@ -15,63 +15,61 @@ export enum SidebarMenuEnum {
 }
 
 export enum ContentSubMenu {
-  GLOBAL_SETTINGS = "Sidebar.Cms.cms-lp-client",
-  LANDING_PAGE_BUILDER = "Sidebar.Cms.cms-landing-page",
-  EMAIL_BUILDER = "Sidebar.Cms.cms-email-editor",
-  MESSAGE_BUILDER = "Sidebar.Cms.cms-sms-editor",
-  LETTER_BUILDER = "Sidebar.Cms.cms-letter-editor",
-  ROBOCALL_BUILDER = "Sidebar.Cms.cms-calls-editor",
-  LP_PLAYGROUND = "Sidebar.Cms.cms-lp-playground",
+  GLOBAL_SETTINGS = "Sidebar.Cms.cms_lp_client",
+  LANDING_PAGE_BUILDER = "Sidebar.Cms.cms_landing_page",
+  EMAIL_BUILDER = "Sidebar.Cms.cms_email_editor",
+  MESSAGE_BUILDER = "Sidebar.Cms.cms_sms_editor",
+  LETTER_BUILDER = "Sidebar.Cms.cms_letter_editor",
+  ROBOCALL_BUILDER = "Sidebar.Cms.cms_calls_editor",
+  LP_PLAYGROUND = "Sidebar.Cms.cms_lp_playground",
 }
 
 export enum StrategySubMenu {
-  STRATEGY_BUILDER = "Sidebar.Journey.journey-strategy-builder-new",
-  DECISION_TREE = "Sidebar.Journey.journey-decision-tree",
-  SIMULATOR = "Sidebar.Journey.journey-simulator",
+  STRATEGY_BUILDER = "Sidebar.Journey.journey_strategy_builder_new",
+  DECISION_TREE = "Sidebar.Journey.journey_decision_tree",
+  SIMULATOR = "Sidebar.Journey.journey_simulator",
   REACTIONS = "Sidebar.Journey.reactions",
 }
 
 export enum AssetManagerSubMenu {
-  PARTNERS = "Sidebar.Asset.asset-partners",
-  TRANSACTIONS = "Sidebar.Asset.asset-transactions",
+  PARTNERS = "Sidebar.Asset.asset_partners",
+  TRANSACTIONS = "Sidebar.Asset.asset_transactions",
 }
 
 export enum ConfigurationSubMenu {
-  GENERAL = "Sidebar.Configuration.configuration-general",
-  OPERATIONS = "Operations",
-  SCHEDULES = "Schedules",
-  USERS = "Users",
-  WEBHOOKS = "Webhooks",
-  QUEUES = "Queues",
-  WORKFLOW = "Workflows",
-  ROLE_MANAGEMENT = "Role management",
+  GENERAL = "Sidebar.Configuration.configuration_general",
+  OPERATIONS = "Sidebar.Configuration.configuration_operations",
+  SCHEDULES = "Sidebar.Configuration.configuration_schedule",
+  USERS = "Sidebar.Configuration.configuration_users",
+  USER_AUDIT = "Sidebar.Configuration.configuration_user-audit",
+  WEBHOOKS = "Sidebar.Configuration.configuration_webhooks",
+  QUEUES = "Sidebar.Configuration.configuration_queues",
+  WORKFLOW = "Sidebar.Configuration.configuration_workflows",
+  ROLE_MANAGEMENT = "Sidebar.Configuration.configuration_roles",
 }
 
 export enum DashboardSubMenu {
-  operationalDashboard = "Sidebar.Dashboard.dashboard-operational",
-  operationalDashboards = "Sidebar.Dashboard.custom-dashboard",
-  communicationOverview = "Communication overview",
-  contentInsights = "Sidebar.Dashboard.insights-content-insights",
-  landingPageInsights = "Sidebar.Dashboard.insights-lp-analytics",
-  reports = "Sidebar.Dashboard.insights-reports",
-  paymentInsights = "Sidebar.Dashboard.insights-payments",
-  chartCreator = "Sidebar.Dashboard.visualization-dashboard",
+  OPERATIONAL_DASHBOARD = "Sidebar.Dashboard.dashboard_operational",
+  OPERATIONAL_DASHBOARDS = "Sidebar.Dashboard.custom_dashboard",
+  COMMUNICATION_OVERVIEW = "Communication overview",
+  CONTENT_INSIGHTS = "Sidebar.Dashboard.insights_content_insights",
+  LANDING_PAGE_INSIGHTS = "Sidebar.Dashboard.insights_lp_analytics",
+  REPORTS = "Sidebar.Dashboard.insights_reports",
+  PAYMENT_INSIGHTS = "Sidebar.Dashboard.insights_payments",
+  CHART_CREATOR = "Sidebar.Dashboard.visualization_dashboard",
 }
 
 export enum AccountsSubMenu {
-  QUEUES = "Sidebar.Account.account-queue",
-  CLAIM_OVERVIEW = "Sidebar.Account.insights-claim-list",
-  ACCOUNT_MANAGEMENT = "Sidebar.Account.account-search",
+  TASKS = "Sidebar.Account.account_queue",
+  CLAIM_OVERVIEW = "Sidebar.Account.insights_claim_list",
+  ACCOUNT_MANAGEMENT = "Sidebar.Account.account_search",
 }
 
 export enum TestExecutor {
   local = "local",
   deviceFarm = "deviceFarm",
   pCloudy = "pCloudy",
-  sauceLab = "sauceLab",
-  perfecto = "perfecto",
   lambdaTest = "lambdatest",
-  browserstack = "browserstack",
 }
 
 export enum SupportedBrowsers {
@@ -100,11 +98,12 @@ export enum Events {
 
 export enum StrategyActions {
   SMS = "sms",
+  MESSAGE = "message",
   EMAIL = "email",
   LETTER = "letter",
   ENABLE_CALLBACK = "Enable Callback",
   DISABLE_CALLBACK = "Disable Callback",
-  ENABLE_REPLIES = "Enable Replies",
+  ENABLE_REPLIES = "Enable_Replies",
   DISABLE_REPLIES = "Disable Replies",
   PLACE_CALL = "Place Call",
   FINANCIAL_ASSESSMENT = "Financial Assessment",
@@ -138,8 +137,8 @@ export enum CurrencyEnum {
 }
 
 export enum LandingPageView {
-  CardView,
-  ListView,
+  CARD_VIEW,
+  LIST_VIEW,
 }
 
 export enum PaymentProvider {
@@ -211,4 +210,36 @@ export enum EditorType {
   LP = "Landing Page",
   LETTER = "Letter",
   CALL = "Call",
+}
+
+export enum ContentObjectMenu {
+  EDIT,
+  CLONE,
+  DELETE,
+}
+
+export enum TaskTabSelect {
+  ACCOUNT_QUEUE,
+  WORKFLOW_ACTIVE_STEPS,
+}
+
+export enum TimePeriod {
+  OVERDUE = "overdue",
+  DUE_TODAY = "due today",
+  UPCOMING = "upcoming",
+  NO_DUE_DATE = "no due date",
+}
+
+export enum GeneralConfigurationCards {
+  NAME = "name",
+  COUNTRY = "country",
+  TIMEZONE = "timezone",
+  DATA_AND_NUMBER_FORMAT = "data and number format",
+  DOMAIN = "domain",
+  EMAIL = "email",
+  MAILGUN = "mailgun",
+  CONTENT_AND_STRATEGY_CATEGORIES = "content and strategy categories",
+  TASKS_TAGS = "tasks tags",
+  METADATA_SCHEMAS = "metadata schemas",
+  ABOUT = "about",
 }

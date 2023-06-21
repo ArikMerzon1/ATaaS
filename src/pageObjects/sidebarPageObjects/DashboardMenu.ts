@@ -1,13 +1,14 @@
-import { container, inject, injectable } from "tsyringe";
 import { By, ThenableWebDriver } from "selenium-webdriver";
-import { IMenu } from "./IMenu";
+import { container, inject, injectable } from "tsyringe";
 import { DashboardSubMenu } from "../../utils/Enums";
+import helpers from "../../utils/helpers";
+import { ChartCreatorPageObject } from "../insights/ChartCreatorPageObject";
 import { CommunicationOverviewPageObject } from "../insights/CommunicationOverviewPageObject";
 import { ContentInsightsPageObject } from "../insights/ContentInsightsPageObject";
 import { LandingPageInsightsPageObject } from "../insights/LandingPageInsightsPageObject";
 import { PaymentInsightsPageObject } from "../insights/PaymentInsightsPageObject";
 import { ReportsPageObject } from "../insights/ReportsPageObject";
-import helpers from "../../utils/helpers";
+import { IMenu } from "./IMenu";
 
 @injectable()
 export class DashboardMenu implements IMenu {
@@ -17,20 +18,23 @@ export class DashboardMenu implements IMenu {
     let selectedSubMenu: unknown;
 
     switch (selection) {
-      case DashboardSubMenu.communicationOverview:
+      case DashboardSubMenu.COMMUNICATION_OVERVIEW:
         selectedSubMenu = container.resolve(CommunicationOverviewPageObject);
         break;
-      case DashboardSubMenu.contentInsights:
+      case DashboardSubMenu.CONTENT_INSIGHTS:
         selectedSubMenu = container.resolve(ContentInsightsPageObject);
         break;
-      case DashboardSubMenu.landingPageInsights:
+      case DashboardSubMenu.LANDING_PAGE_INSIGHTS:
         selectedSubMenu = container.resolve(LandingPageInsightsPageObject);
         break;
-      case DashboardSubMenu.reports:
+      case DashboardSubMenu.REPORTS:
         selectedSubMenu = container.resolve(ReportsPageObject);
         break;
-      case DashboardSubMenu.paymentInsights:
+      case DashboardSubMenu.PAYMENT_INSIGHTS:
         selectedSubMenu = container.resolve(PaymentInsightsPageObject);
+        break;
+      case DashboardSubMenu.CHART_CREATOR:
+        selectedSubMenu = container.resolve(ChartCreatorPageObject);
         break;
       default:
         throw new Error(`You've picked a menu not from the list please try again: ${selection}`);

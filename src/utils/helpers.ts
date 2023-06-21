@@ -1,15 +1,26 @@
-import { By, Key, until, WebDriver, WebElement, WebElementPromise } from "selenium-webdriver";
 import * as fs from "fs";
-import path from "path";
-import { container } from "tsyringe";
 import https from "https";
+import _get from "lodash.get";
+import path from "path";
+import { By, Key, until, WebDriver, WebElement, WebElementPromise } from "selenium-webdriver";
+import { container } from "tsyringe";
 import { zip } from "zip-a-folder";
-import { IAWSArtifact } from "./IAWSArtifact";
+import FindElementError from "../errors/FindElementError";
 import { TestExecutor } from "./Enums";
 import HelpersBase from "./helpersbase";
-import FindElementError from "../errors/FindElementError";
+import { IAWSArtifact } from "./IAWSArtifact";
+import { RetrierOptions } from "./models/util";
+
+const DELAY = 1000;
+const MAX_TRIES = 10;
 
 export default class Helpers extends HelpersBase {
+  static async click(element: WebElement): Promise<void> {
+    console.log("Click");
+    const webDriver: WebDriver = container.resolve("webDriver");
+    await webDriver.executeScript("arguments[0].click();", element);
+  }
+
   static async scrollToElement(element: WebElement): Promise<void> {
     console.log("ScrollToElement");
     const webDriver: WebDriver = container.resolve("webDriver");
@@ -48,7 +59,12 @@ export default class Helpers extends HelpersBase {
 
   static async sleep(seconds: number): Promise<void> {
     if (seconds > 2) console.warn("Please consider using a Polling methode instead of a static Wait !!!");
-    return new Promise((_) => setTimeout(_, seconds * 1000));
+
+    return this.delay(seconds * 1000);
+  }
+
+  private static async delay(milliseconds = 0): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
   }
 
   static async clearInputField(element: WebElement): Promise<void> {
@@ -67,7 +83,7 @@ export default class Helpers extends HelpersBase {
       case TestExecutor.deviceFarm:
       case TestExecutor.pCloudy:
         try {
-          const testName = expect.getState().currentTestName.split(" ").pop();
+          const testName = expect.getState()?.currentTestName?.split(" ").pop();
           const screenshotsFolder = path.join(__dirname, `../../reports/${testName}`);
           if (!fs.existsSync(screenshotsFolder)) {
             fs.mkdir(screenshotsFolder, (err) => {
@@ -101,6 +117,7 @@ export default class Helpers extends HelpersBase {
     selector: By,
     highlightElement = false,
     checkLoading = true,
+    checkVisibility = true,
     optTimeout = 2000,
     optPollTimeout = 500,
     iterator = 5
@@ -109,40 +126,42 @@ export default class Helpers extends HelpersBase {
       console.log(`waiting for element to appear: ${selector}`);
       const webDriver: WebDriver = container.resolve("webDriver");
 
-      const element = await webDriver.wait(until.elementLocated(selector), optTimeout, `element not Located after ${optTimeout}ms`, optPollTimeout);
-      await webDriver.wait(until.elementIsEnabled(element), optTimeout, `element not Enabled after ${optTimeout}ms`, optPollTimeout);
+      if (checkVisibility) {
+        const element = await webDriver.wait(until.elementLocated(selector), optTimeout, `element not Located after ${optTimeout}ms`, optPollTimeout);
+        await webDriver.wait(until.elementIsEnabled(element), optTimeout, `element not Enabled after ${optTimeout}ms`, optPollTimeout);
 
-      if (highlightElement) await this.highlightElement(element);
+        if (highlightElement) await this.highlightElement(element);
 
-      console.log(`isEnabled: ${await element.isEnabled()}`);
-      console.log(`isDisplayed: ${await element.isDisplayed()}`);
+        console.log(`isDisplayed: ${await element.isDisplayed()}`);
+        console.log(`isEnabled: ${await element.isEnabled()}`);
 
-      if (!(await element.isDisplayed()) || !(await element.isEnabled())) {
-        throw new Error("ElementNotInteractableError");
+        if (!(await element.isDisplayed()) || !(await element.isEnabled())) {
+          throw Error("ElementNotInteractableError");
+        }
       }
-
       if (checkLoading) {
         const isLoading: WebElement = await webDriver.executeScript("return document.querySelector('.is-loading')");
-        if (!Helpers.isNullOrUndefined(isLoading)) throw new Error("NoSuchElementError");
-        await this.sleep(1);
+        const loadingBackground: WebElement = await webDriver.executeScript("return document.querySelector('.loading-background')");
+        if (!Helpers.isNullOrUndefined(isLoading) || !Helpers.isNullOrUndefined(loadingBackground)) throw Error("NoSuchElementError");
       }
 
       await this.waitForNetworkCallToFinish();
     } catch (error) {
+      const message = _get(error, "message");
       console.log(`iterator: ${iterator}`);
-      console.warn(`error message: ${error.message.toString()}`);
+      console.warn(`error message: ${message?.toString()}`);
       if (
-        (error.message.toString().includes("NoSuchElementError") ||
-          error.message.toString().includes("ElementNotInteractableError") ||
-          error.message.toString().includes("ElementNotInteractableError") ||
-          error.message.toString().includes("or the document has been refreshed") ||
-          error.message.toString().includes("ElementClickInterceptedError") ||
-          error.message.toString().includes("element not Located after")) &&
+        (message?.toString().includes("NoSuchElementError") ||
+          message?.toString().includes("ElementNotInteractableError") ||
+          message?.toString().includes("ElementNotInteractableError") ||
+          message?.toString().includes("or the document has been refreshed") ||
+          message?.toString().includes("ElementClickInterceptedError") ||
+          message?.toString().includes("element not Located after")) &&
         iterator
       ) {
         iterator--;
         await this.sleep(1);
-        await this.waitForElement(selector, highlightElement, checkLoading, optTimeout, optPollTimeout, iterator);
+        await this.waitForElement(selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout, iterator);
       }
     }
   }
@@ -161,6 +180,7 @@ export default class Helpers extends HelpersBase {
     selector: By,
     highlightElement = false,
     checkLoading = true,
+    checkVisibility = true,
     optTimeout = 4000,
     optPollTimeout = 500,
     iterator = 5
@@ -168,18 +188,25 @@ export default class Helpers extends HelpersBase {
     console.log("GetElement");
     try {
       const webDriver: WebDriver = container.resolve("webDriver");
-      await this.waitForElement(selector, highlightElement, checkLoading, optTimeout, optPollTimeout, iterator);
+      await this.waitForElement(selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout, iterator);
       return webDriver.findElement(selector);
     } catch (error) {
       throw Error(JSON.stringify(error, null, 2));
     }
   }
 
-  static async getElements(selector: By, highlightElement = false, checkLoading = true, optTimeout = 2000, optPollTimeout = 500): Promise<WebElement[]> {
+  static async getElements(
+    selector: By,
+    highlightElement = false,
+    checkLoading = true,
+    checkVisibility = true,
+    optTimeout = 2000,
+    optPollTimeout = 500
+  ): Promise<WebElement[]> {
     console.log("GetElements");
     try {
       const webDriver: WebDriver = container.resolve("webDriver");
-      await this.waitForElement(selector, highlightElement, checkLoading, optTimeout, optPollTimeout);
+      await this.waitForElement(selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout);
       return webDriver.findElements(selector);
     } catch (error) {
       throw JSON.stringify(error, null, 2);
@@ -191,12 +218,13 @@ export default class Helpers extends HelpersBase {
     selector: By,
     highlightElement = false,
     checkLoading = true,
+    checkVisibility = true,
     optTimeout = 2000,
     optPollTimeout = 500
   ): Promise<WebElement> {
     console.log("GetElementWithinElement");
     try {
-      await this.waitForElement(selector, highlightElement, checkLoading, optTimeout, optPollTimeout);
+      await this.waitForElement(selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout);
       return element.findElement(selector);
     } catch (error) {
       throw JSON.stringify(error, null, 2);
@@ -208,12 +236,13 @@ export default class Helpers extends HelpersBase {
     selector: By,
     highlightElement = false,
     checkLoading = true,
+    checkVisibility = true,
     optTimeout = 2000,
     optPollTimeout = 500
   ): Promise<WebElement[]> {
     console.log("GetElementsWithinElement");
     try {
-      await this.waitForElement(selector, highlightElement, checkLoading, optTimeout, optPollTimeout);
+      await this.waitForElement(selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout);
       return element.findElements(selector);
     } catch (error) {
       throw JSON.stringify(error, null, 2);
@@ -225,13 +254,14 @@ export default class Helpers extends HelpersBase {
     selector: By,
     highlightElement = false,
     checkLoading = true,
+    checkVisibility = true,
     optTimeout = 2000,
     optPollTimeout = 500
   ): Promise<WebElement[]> {
     console.log("getElementsWithinElement");
     try {
-      const elm = await Helpers.getElement(selector, highlightElement, checkLoading, optTimeout, optPollTimeout);
-      return Helpers.getElementsWithinElement(elm, selector, highlightElement, checkLoading, optTimeout, optPollTimeout);
+      const elm = await Helpers.getElement(selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout);
+      return Helpers.getElementsWithinElement(elm, selector, highlightElement, checkLoading, checkVisibility, optTimeout, optPollTimeout);
     } catch (error) {
       throw JSON.stringify(error, null, 2);
     }
@@ -245,10 +275,9 @@ export default class Helpers extends HelpersBase {
   static async waitForText(selector: By, expectedText = ""): Promise<boolean> {
     console.log("WaitForText");
     try {
-      const webDriver: WebDriver = container.resolve("webDriver");
       let text = "";
       while (text === "") {
-        const element = await webDriver.findElement(selector);
+        const element = await this.getElement(selector, false, true, true, 6000, 100);
         text = await element.getText();
         console.log(`current text: ${text}`);
         if (text === expectedText) return true;
@@ -267,9 +296,7 @@ export default class Helpers extends HelpersBase {
         const loaders = await this.findElements(By.css(".loading-overlay.is-active"));
         const loadersState = await Promise.all(loaders.map((loader) => this.isDisplayed(loader)));
 
-        const isLoadersDisplayed = loadersState.some((loader) => loader === true);
-
-        element = isLoadersDisplayed;
+        element = loadersState.some((loader) => loader);
 
         console.log("waitForNetworkCallToFinish", element);
         await Helpers.sleep(1);
@@ -328,7 +355,7 @@ export default class Helpers extends HelpersBase {
     console.log(`saving file: ${artifact.filename}`);
     try {
       https.get(artifact.url, (res) => {
-        const testName = expect.getState().currentTestName.split(" ").pop();
+        const testName = expect.getState()?.currentTestName?.split(" ").pop();
         const reportsFolder = path.join(__dirname, `../../reports/${testName}`);
         if (!fs.existsSync(reportsFolder)) {
           fs.mkdir(reportsFolder, (err) => {
@@ -374,5 +401,44 @@ export default class Helpers extends HelpersBase {
 
   public static getRandomNumberBetween(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  public static async findAsync<T extends object | null>(arr: T[], asyncCallback: (value: T, index: number, array: T[]) => Promise<T>): Promise<T> {
+    const promises = arr.map(asyncCallback);
+    const results = await Promise.all(promises);
+    const index = results.findIndex((result) => result);
+    return arr[index];
+  }
+
+  public static async setAttribute(element: WebElement, attName: string, attValue: string): Promise<void> {
+    const webDriver: WebDriver = container.resolve("webDriver");
+    await webDriver.executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);", element, attName, attValue);
+  }
+
+  public static async removeClass(element: WebElement, className: string): Promise<void> {
+    const webDriver: WebDriver = container.resolve("webDriver");
+    await webDriver.executeScript("arguments[0].classList.remove(arguments[1])", element, className);
+  }
+
+  public static async retrier<T = unknown>(
+    call: (tries: number) => Promise<T | undefined | null>,
+    options?: RetrierOptions<T | undefined | null>
+  ): Promise<T | undefined | null> {
+    let tries = 0;
+    let result: T | undefined | null = null;
+
+    const maxTries = options?.maxTries || MAX_TRIES;
+    const delayTime = typeof options?.delay === "number" ? options.delay : DELAY;
+    const checkFn = options?.checkFn || ((result: T) => !!result);
+
+    do {
+      tries += 1;
+
+      await this.delay(delayTime);
+
+      result = await call(tries);
+    } while (!checkFn(result as T) && tries <= maxTries);
+
+    return result;
   }
 }

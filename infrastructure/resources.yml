@@ -23,6 +23,10 @@ Parameters:
     Type: String
   DuplicationPreventionLayerRedisEndpoint:
     Type: String
+  ReportingEventsLambdaName:
+    Type: String
+  TestStrategyPathMeta:
+    Type: String
   LambdaUsername:
     Type: String
   LambdaKey:
@@ -78,7 +82,7 @@ Parameters:
     Default: githubTokenForCiCd
   GithubRepositoryUrl:
     Type: String
-    Default: https://github.com/exness/ATaaS.git
+    Default: https://github.com/receeve-gmbh/ATaaS.git
   SlackChannelID:
     Type: String
   GithubRepositoryBranch:
@@ -136,6 +140,9 @@ Resources:
         Image: aws/codebuild/standard:5.0
         Type: LINUX_CONTAINER
         EnvironmentVariables:
+          - Name: REPORTING_EVENTS_DIRECT_LAMBDA_NAME
+            Type: PLAINTEXT
+            Value: !Ref ReportingEventsLambdaName
           - Name: DUPLICATION_PREVENTION_LAYER_REDIS_ENDPOINT
             Type: PLAINTEXT
             Value: !Ref DuplicationPreventionLayerRedisEndpoint
@@ -220,15 +227,20 @@ Resources:
           - Name: BASE_REST_API
             Type: PLAINTEXT
             Value: !Ref BaseRestApi
+          - Name: TEST_STRATEGY_PATH_META
+            Type: PLAINTEXT
+            Value: !Ref TestStrategyPathMeta
           - Name: AUTH
             Type: PLAINTEXT
             Value: !Ref Authorization
           - Name: TEST_CLIENT_ID
             Type: PLAINTEXT
             Value: !Ref TestClientId
+          - Name: SERVICE_NAME
+            Value: !Ref ServiceName
           - Name: REQUEST_SENDER
             Type: PLAINTEXT
-            Value: exness
+            Value: receeve
           - Name: SLACK_CHANNEL_ID
             Type: PLAINTEXT
             Value: !Ref SlackChannelID
@@ -257,7 +269,7 @@ Resources:
       FunctionName: !Join [ "-", [ !Ref ServiceName, 'SlackBot', !Ref Stage ] ]
       CodeUri: ./slackBot
       Handler: slackBotRequestHandler.handler
-      Runtime: nodejs14.x
+      Runtime: nodejs18.x
       Timeout: 30
       MemorySize: 128
       Environment:

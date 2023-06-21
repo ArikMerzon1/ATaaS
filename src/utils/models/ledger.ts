@@ -1,12 +1,12 @@
-import { FeeLedgerEntry } from "@exness/account-api/FeeLedgerEntry";
-import { InvoiceLedgerEntry } from "@exness/account-api/InvoiceLedgerEntry";
-import { PaymentLedgerEntry } from "@exness/account-api/PaymentLedgerEntry";
-import { AdjustmentLedgerEntry } from "@exness/account-api/AdjustmentLedgerEntry";
-import { ChargebackLedgerEntry } from "@exness/account-api/ChargebackLedgerEntry";
-import { DiscountLedgerEntry } from "@exness/account-api/DiscountLedgerEntry";
-import { LedgerEntry as BaseLedgerEntry } from "@exness/account-api/LedgerEntry";
+import { FeeLedgerEntry } from "@receeve-gmbh/account-api/FeeLedgerEntry";
+import { InvoiceLedgerEntry } from "@receeve-gmbh/account-api/InvoiceLedgerEntry";
+import { PaymentLedgerEntry } from "@receeve-gmbh/account-api/PaymentLedgerEntry";
+import { AdjustmentLedgerEntry } from "@receeve-gmbh/account-api/AdjustmentLedgerEntry";
+import { ChargebackLedgerEntry } from "@receeve-gmbh/account-api/ChargebackLedgerEntry";
+import { DiscountLedgerEntry } from "@receeve-gmbh/account-api/DiscountLedgerEntry";
+import { LedgerEntry as BaseLedgerEntry } from "@receeve-gmbh/account-api/LedgerEntry";
 
-import { ComputedLedgerEntryState } from "@exness/account-api/AccountDTO";
+import { ComputedLedgerEntryState } from "@receeve-gmbh/account-api/AccountDTO";
 
 export enum LedgerType {
   FEE = "fee",

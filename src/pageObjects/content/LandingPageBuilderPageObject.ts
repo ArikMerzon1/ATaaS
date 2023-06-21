@@ -22,8 +22,8 @@ export default class LandingPageBuilderPageObject extends ContentBuildBase {
   async createLandingPage(withTemplate: boolean): Promise<LandingPageCreatorPageObject> {
     console.log("createLandingPage");
     try {
-      await helpers.waitForElement(By.className("grid"), false, true, 8000);
-      await (await helpers.getElement(By.css('[data-test-id="bundle-create-btn"]'), false, true, 2000, 500, 20)).click();
+      await helpers.waitForElement(By.className("grid"), false, true, true, 8000);
+      await (await helpers.getElement(By.css('[data-test-id="bundle-create-btn"]'), false, true, true, 2000, 500, 20)).click();
 
       if (withTemplate) {
         const element = await helpers.getElement(By.css('[data-test-id="design-18591"]'));

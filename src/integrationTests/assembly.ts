@@ -1,7 +1,6 @@
 import AWS, { DynamoDB, SNS } from "aws-sdk";
-import { Handler } from "@exness/sqs-handler";
-import { MessageEmitter } from "@exness/emit-message";
-
+import { Handler } from "@receeve-gmbh/sqs-handler";
+import { SNSMessageEmitter } from "@receeve-gmbh/emit-message";
 import DynamoRunningTestSuiteDAO from "./dao/DynamoRunningTestSuiteDAO";
 import DynamoTestSuiteDefinitionDAO from "./dao/DynamoTestSuiteDefinitionDAO";
 import CmdTestSuiteCheckV1Handler from "./handlers/cmd.testSuite.check.v1";
@@ -18,6 +17,8 @@ AWS.config.update({
   httpOptions: { connectTimeout: 10000, timeout: 5000 },
   maxRetries: 3,
   retryDelayOptions: { base: 500 },
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
 });
 
 const sns: SNS = new SNS();
@@ -25,15 +26,23 @@ const dynamoDB = new DynamoDB.DocumentClient({
   convertEmptyValues: true,
 });
 
-const testSuiteDefinitionDAO = new DynamoTestSuiteDefinitionDAO(dynamoDB, `${process.env.DEFINITION_TABLE_NAME}`);
-const runningTestSuiteDAO = new DynamoRunningTestSuiteDAO(dynamoDB, `${process.env.RUNNING_TABLE_NAME}`);
-const messageEmitter = new MessageEmitter({ sns });
+function getTestSuiteDefinationDaoName(): string {
+  return "AcceptanceTesting-Definition-DEV";
+}
+
+function getRunningTestSuiteDaoName(): string {
+  return "AcceptanceTesting-Running-DEV";
+}
+
+const testSuiteDefinitionDAO = new DynamoTestSuiteDefinitionDAO(dynamoDB, getTestSuiteDefinationDaoName());
+const runningTestSuiteDAO = new DynamoRunningTestSuiteDAO(dynamoDB, getRunningTestSuiteDaoName());
+const messageEmitter = new SNSMessageEmitter({ sns });
 
 interface Handlers {
   [handlerName: string]: Handler<unknown>;
 }
 
-const handlers: Handlers = {
+export const integrationHandlers: Handlers = {
   "cmd.testSuite.start.v1": new CmdTestSuiteStartV1Handler(testSuiteDefinitionDAO, runningTestSuiteDAO, messageEmitter),
   "cmd.testSuite.check.v1": new CmdTestSuiteCheckV1Handler(runningTestSuiteDAO, messageEmitter),
   "cmd.testSuite.set.v1": new CmdTestSuiteSetV1Handler(messageEmitter),
@@ -56,12 +65,12 @@ const allowedDirectHandlers: Handlers = [
 ].reduce(
   (handlerAggregator, allowedHandlerName) => ({
     ...handlerAggregator,
-    [allowedHandlerName]: handlers[allowedHandlerName],
+    [allowedHandlerName]: integrationHandlers[allowedHandlerName],
   }),
   {}
 );
 
 export default {
-  getMessageHandler: (messageName: string) => handlers[messageName],
+  getMessageHandler: (messageName: string) => integrationHandlers[messageName],
   getDirectMessageHandler: (messageName: string) => allowedDirectHandlers[messageName],
 };

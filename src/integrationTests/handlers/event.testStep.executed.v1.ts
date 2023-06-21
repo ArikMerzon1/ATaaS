@@ -1,5 +1,5 @@
-import { Handler } from "@exness/sqs-handler";
-import logger from "@exness/logger";
+import { Handler } from "@receeve-gmbh/sqs-handler";
+import logger from "@receeve-gmbh/logger";
 
 import { EventTestStepExecuted } from "../../types/event.testStep.executed.v1";
 import IRunningTestSuiteDAO from "../dao/IRunningTestSuiteDAO";

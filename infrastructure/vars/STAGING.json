@@ -1,9 +1,9 @@
 {
   "Parameters": {
-    "BackofficeURL": "",
-    "BackofficeUserName" : "",
-    "BackofficeUserPassword" : "",
-    "Executor": "",
+    "BackofficeURL": "https://backoffice.receeve-staging.com/",
+    "BackofficeUserName" : "automation.test@reveeve.com",
+    "BackofficeUserPassword" : "Aa!12345",
+    "Executor": "deviceFarm",
     "TestClientId": "",
     "BaseRestApi": ""
   }

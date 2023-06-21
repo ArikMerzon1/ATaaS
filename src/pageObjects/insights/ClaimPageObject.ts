@@ -34,7 +34,7 @@ export default class ClaimPageObject {
 
   async GetDebtorFirstName(): Promise<string> {
     console.log("GetDebtorFirstName");
-    const nameProp = await helpers.getElement(By.css(`[data-test-id="name"]`), false, true, 4000);
+    const nameProp = await helpers.getElement(By.css(`[data-test-id="name"]`), false, true, true, 4000);
     const debtorFullName = await helpers.getElementWithinElement(nameProp, By.className("debtor-field__value"));
     const name = (await debtorFullName.getText()).split(" ");
     if (Object.values<string>(TitlesList).includes(name[0])) {
@@ -45,7 +45,7 @@ export default class ClaimPageObject {
 
   async GetClaimStatus(): Promise<string> {
     console.log("GetClaimStatus");
-    const [claimStatus] = await Promise.all([(await helpers.getElement(By.css(`[data-test-id="claim-status"]`), false)).getText()]);
-    return claimStatus;
+    const claimStatus = await helpers.getElement(By.css(`[data-test-id="claim-status"]`));
+    return claimStatus.getText();
   }
 }

@@ -7,34 +7,35 @@ import Helpers from "../utils/helpers";
 export default class ProductsQueries {
   constructor(@inject(HttpProvider) private readonly httpProvider: HttpProvider) {}
 
-  async addAccountProduct(accountReference: string): Promise<string> {
-    try {
-      console.log("addAccountProduct");
-      const bodyFormat = [
-        {
-          accountReference: `${accountReference}`,
-          productReference: "ProductRef_{{guid}}",
-          name: "Macbook Pro",
-          type: "Product",
-          code: "Product_101",
-          meta: {
-            color: "Silver",
-          },
+  async addAccountProduct(accountReference: string): Promise<string | null> {
+    console.log("addAccountProduct");
+    const bodyFormat = [
+      {
+        accountReference: `${accountReference}`,
+        productReference: "ProductRef_{{guid}}",
+        name: "Macbook Pro",
+        type: "Product",
+        code: "Product_101",
+        meta: {
+          color: "Silver",
         },
-      ];
+      },
+    ];
 
-      const clientId = Helpers.getValue(process.env.TEST_CLIENT_ID);
-      const result = await this.httpProvider.post(`${clientId}/add_account_products`, dummyJson.parse(JSON.stringify(bodyFormat)));
+    const clientId = Helpers.getValue(process.env.TEST_CLIENT_ID);
+    const result = await this.httpProvider.post(`${clientId}/add_account_products`, dummyJson.parse(JSON.stringify(bodyFormat)));
 
-      const key = Object.keys(result.data)[0];
-      if (result.data[key].success) {
-        const obj = JSON.parse(JSON.stringify(result.data[key])) as Response;
-        return obj.data[0].productReference;
-      }
-      throw new Error(result.data[key].messages[0]);
-    } catch (e) {
-      throw Error(e);
+    const key = Object.keys(result.data)[0];
+    if (result.data[key].success) {
+      const obj = JSON.parse(JSON.stringify(result.data[key])) as Response;
+      return obj.data[0].productReference;
     }
+
+    if (result.data?.[key]?.messages?.[0]) {
+      throw new Error(result.data[key].messages[0]);
+    }
+
+    return null;
   }
 
   async updateAccountProducts(

@@ -1,4 +1,4 @@
-import { MessageEmitter } from "@exness/emit-message";
+import { MessageEmitter } from "@receeve-gmbh/emit-message";
 
 import getRefSchemas from "../../helpers/getRefSchemas";
 import { CommandTestSuiteSet } from "../../../types/cmd.testSuite.set.v1";

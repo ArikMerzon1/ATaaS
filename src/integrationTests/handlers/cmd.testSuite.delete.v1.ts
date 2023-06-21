@@ -1,6 +1,6 @@
-import logger from "@exness/logger";
-import { Handler } from "@exness/sqs-handler";
-import { IMessageEmitter } from "@exness/emit-message";
+import logger from "@receeve-gmbh/logger";
+import { Handler } from "@receeve-gmbh/sqs-handler";
+import { IMessageEmitter } from "@receeve-gmbh/emit-message";
 
 import { CommandTestSuiteDelete } from "../../types/cmd.testSuite.delete.v1";
 import { EventTestSuiteDelete } from "../../types/event.testSuite.deleted.v1";

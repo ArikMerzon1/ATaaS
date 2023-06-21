@@ -1,6 +1,6 @@
-import CommandMessageScheduleSchema from "@exness/message-scheduler-api/cmd.message.schedule.v1.json";
-import CommandClaimCreateSchema from "@exness/account-api/cmd.claim.create.v1.json";
-import { MessageEmitter } from "@exness/emit-message";
+import CommandMessageScheduleSchema from "@receeve-gmbh/message-scheduler-api/cmd.message.schedule.v1.json";
+import CommandClaimCreateSchema from "@receeve-gmbh/account-api/cmd.claim.create.v1.json";
+import { MessageEmitter } from "@receeve-gmbh/emit-message";
 
 import getRefSchemas from "../../helpers/getRefSchemas";
 import { EventTestSuiteStarted } from "../../../types/event.testSuite.started.v1";

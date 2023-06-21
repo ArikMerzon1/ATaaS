@@ -1,6 +1,7 @@
 module.exports = {
   preset: "ts-jest",
-  testEnvironment: "node",
+  testEnvironment: "./seleniumEnvironment.ts",
+  testTimeout: 12 * 60 * 1000,
   roots: ["<rootDir>/src"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",

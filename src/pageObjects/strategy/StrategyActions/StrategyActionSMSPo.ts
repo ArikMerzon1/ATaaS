@@ -9,7 +9,7 @@ export default class StrategyActionSMSPo extends StrategyStepBasePo {
     console.log("Set Properties");
     const testFields = await helpers.getElements(By.css(`.field.text-left`));
     for (const item of testFields) {
-      const label = await helpers.getElementWithinElement(item, By.className("label"), true, false, 5000);
+      const label = await helpers.getElementWithinElement(item, By.className("label"), true, false, true, 5000);
       if ((await label.getText()).toLowerCase() === "content") {
         await this.SelectDropdownList(item);
         await this.SearchInList(properties[0]);

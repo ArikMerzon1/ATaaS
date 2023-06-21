@@ -57,7 +57,7 @@ export default class AssetPartnersPageObject {
   }
 
   public async getPartnersCount(): Promise<number> {
-    const partnerTypeElements = await helpers.getElements(By.css("tr.table-row"), true, true, 5000, 1000);
+    const partnerTypeElements = await helpers.getElements(By.css("tr.table-row"), true, true, true, 5000, 1000);
     if (partnerTypeElements.length) return partnerTypeElements.length;
     return 0;
   }

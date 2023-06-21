@@ -5,6 +5,8 @@ import { ContentSubMenu } from "../../utils/Enums";
 import helpers from "../../utils/helpers";
 import LandingPageBuilderPageObject from "../content/LandingPageBuilderPageObject";
 import EmailBuilderPageObject from "../content/EmailBuilderPageObject";
+import MessagingBuilderPageObject from "../content/MessagingBuilderPageObject";
+import LetterBuilderPageObject from "../content/LetterBuilderPageObject";
 
 @injectable()
 export class ContentMenu implements IMenu {
@@ -20,8 +22,14 @@ export class ContentMenu implements IMenu {
       case ContentSubMenu.EMAIL_BUILDER:
         selectedSubMenu = container.resolve(EmailBuilderPageObject);
         break;
+      case ContentSubMenu.MESSAGE_BUILDER:
+        selectedSubMenu = container.resolve(MessagingBuilderPageObject);
+        break;
+      case ContentSubMenu.LETTER_BUILDER:
+        selectedSubMenu = container.resolve(LetterBuilderPageObject);
+        break;
       default:
-        throw new Error(`You've picked a menu not from the list please try again: ${selection}`);
+        throw Error(`You've picked a sub-menu not from the list please try again: ${selection}`);
     }
     await (await helpers.getElement(By.css(`[data-test-id="${selection}"]`))).click();
     return selectedSubMenu;

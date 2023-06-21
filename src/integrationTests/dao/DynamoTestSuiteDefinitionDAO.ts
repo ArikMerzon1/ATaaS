@@ -1,4 +1,4 @@
-import logger from "@exness/logger";
+import logger from "@receeve-gmbh/logger";
 import { DocumentClient } from "aws-sdk/lib/dynamodb/document_client";
 
 import ITestSuiteDefinitionDAO from "./ITestSuiteDefinitionDAO";
@@ -27,7 +27,7 @@ export default class DynamoTestSuiteDefinitionDAO implements ITestSuiteDefinitio
     const { testSuiteId, ...patch } = data;
     console.log("Updating test suite definition", { clientId, data });
 
-    // Ref: https://github.com/exness/LandingPage/blob/master/ReadSide/src/dao/ReadSideDynamoDAO.ts
+    // Ref: https://github.com/receeve-gmbh/LandingPage/blob/master/ReadSide/src/dao/ReadSideDynamoDAO.ts
     let updateExpressionString = "SET";
     const expressionAttributeNames: { [s: string]: string } = {};
     const expressionAttributeValues: { [s: string]: string } = {};
@@ -67,7 +67,7 @@ export default class DynamoTestSuiteDefinitionDAO implements ITestSuiteDefinitio
   }
 
   public async find(clientId: string, testSuiteId: string): Promise<TestSuite | null> {
-    console.log("Searching test suite definition", { clientId, testSuiteId });
+    console.log("Searching test suite definition", { clientId, testSuiteId, tableName: this.tableName, dynamo: this.dynamoDB });
 
     try {
       const queryResult = await this.dynamoDB
@@ -80,13 +80,15 @@ export default class DynamoTestSuiteDefinitionDAO implements ITestSuiteDefinitio
         })
         .promise();
 
+      console.log("ITEM", queryResult.$response);
+
       if (!queryResult.Item) {
         return null;
       }
 
       return queryResult.Item as TestSuite;
     } catch (error) {
-      log.error("Find error", { error });
+      console.log("Find error", { error });
       return null;
     }
   }
@@ -133,7 +135,7 @@ export default class DynamoTestSuiteDefinitionDAO implements ITestSuiteDefinitio
         })
         .promise();
     } catch (error) {
-      log.error(error.message || error, { clientId, testSuiteId });
+      log.error((error as Error)?.message, { clientId, testSuiteId });
 
       throw error;
     }

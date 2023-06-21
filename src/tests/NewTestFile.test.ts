@@ -30,7 +30,6 @@ class NewTestFileTest extends AbstractTestBase {
       // console.log(newArr);
     } catch (err) {
       console.error(err);
-      console.error(err.trace);
     }
     // const newArr = products as IProduct[];
     // const newArr2 = <Array<IProduct>>products;

@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { suite, test, timeout } from "@testdeck/jest";
 import assert from "assert";
 
-import { AssetManagerSubMenu, PartnerType, SidebarMenuEnum, AccountsSubMenu } from "../utils/Enums";
+import { SidebarMenuEnum, AccountsSubMenu } from "../utils/Enums";
 import AbstractTestBase from "./AbstractTestBase";
 import AccountTaskPageObject from "../pageObjects/accounts/AccountTaskPageObject";
 
@@ -15,7 +15,7 @@ class AccountTaskTests extends AbstractTestBase {
     await backoffice.LoginPage().Login();
     const tasksObject: AccountTaskPageObject = await (
       await backoffice.SidebarMenu().SelectTab(SidebarMenuEnum.ACCOUNT)
-    ).SelectFromSubMenu(AccountsSubMenu.queues);
+    ).SelectFromSubMenu(AccountsSubMenu.TASKS);
 
     await tasksObject.waitForTasksToLoad();
 

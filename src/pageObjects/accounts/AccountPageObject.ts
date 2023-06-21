@@ -1,4 +1,4 @@
-import { AccountRestructuringNotificationSchedule } from "@exness/account-api/AccountRestructuringNotificationSchedule";
+import { AccountRestructuringNotificationSchedule } from "@receeve-gmbh/account-api/AccountRestructuringNotificationSchedule";
 import { inject, injectable } from "tsyringe";
 import { By, ThenableWebDriver } from "selenium-webdriver";
 import helpers from "../../utils/helpers";
@@ -18,13 +18,24 @@ export default class AccountPageObject {
 
   public async GetUnpaidAmount(): Promise<number> {
     console.log("GetUnpaidAmount");
-    // ToDo
-    // await utils.WaitForTextToAppear(By.className("ledger__header__amount"));
-    await helpers.sleep(5);
-    const amountElement = await helpers.getElement(By.className("ledger__header__amount"));
+    await helpers.sleep(2);
+    const amountElement = await helpers.getElement(By.css(`[data-test-id="unpaid-amount"]`));
     const amount = await amountElement.getText();
     console.log(`Unpaid amount: ${amount}`);
-    return parseFloat(amount.split(" ")[1].replace(",", ""));
+
+    let empty = "";
+    const result = amount.match(/\d+/g);
+
+    if (result) {
+      result.forEach((item) => {
+        empty += item;
+      });
+    }
+
+    const number = parseFloat(empty);
+    if (Number(number)) return number / 100;
+
+    throw Error("Couldn't get the Unpaid Amount for UI");
   }
 
   public async RestructureAccount(reminderOptions: {

@@ -1,6 +1,6 @@
 // import AWS, { DynamoDB, SNS } from "aws-sdk";
-import { Handler } from "@exness/sqs-handler";
-// import { MessageEmitter } from "@exness/emit-message";
+import { Handler } from "@receeve-gmbh/sqs-handler";
+// import { MessageEmitter } from "@receeve-gmbh/emit-message";
 
 // import DynamoRunningTestSuiteDAO from "./dao/DynamoRunningTestSuiteDAO";
 // import DynamoTestSuiteDefinitionDAO from "./dao/DynamoTestSuiteDefinitionDAO";

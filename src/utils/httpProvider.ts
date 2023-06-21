@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import _get from "lodash.get";
 import { singleton } from "tsyringe";
 import Helpers from "./helpers";
 
@@ -51,10 +52,13 @@ export class HttpProvider {
       return response;
     } catch (error) {
       if (expectedFailure) {
-        return error;
+        throw error;
       }
-      if (!path.includes("get_events")) throw new Error(`${error.message}\nError Status Test: ${error.response.statusText}\nURL: ${error.config.url}`);
-      return error;
+      if (!path.includes("get_events"))
+        throw new Error(
+          `${(error as AxiosError)?.message}\nError Status Test: ${(error as AxiosError)?.response?.statusText}\nURL: ${(error as AxiosError)?.config?.url}`
+        );
+      throw error;
     }
   }
 
@@ -80,9 +84,11 @@ export class HttpProvider {
       if (expectedFailure) return response;
       const { messages } = response.data[key].messages;
       return messages.data.message;
-    } catch (err) {
-      console.error(err.response.statusText);
-      throw Error(err.response.data.message);
+    } catch (error) {
+      const message = _get((error as AxiosError)?.response?.data, "message");
+
+      console.error((error as AxiosError)?.response?.statusText);
+      throw Error(message);
     }
   }
 
@@ -103,8 +109,11 @@ export class HttpProvider {
       console.log(`data: ${JSON.stringify(response.data)}`);
       return response;
     } catch (error) {
-      if (!path.includes("get_events")) throw new Error(`${error.message}\nError Status Test: ${error.response.statusText}\nURL: ${error.config.url}`);
-      return error;
+      if (!path.includes("get_events"))
+        throw new Error(
+          `${(error as Error).message}\nError Status Test: ${(error as AxiosError)?.response?.statusText}\nURL: ${(error as AxiosError)?.config?.url}`
+        );
+      throw error;
     }
   }
 }

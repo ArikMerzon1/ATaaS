@@ -9,7 +9,7 @@ export default class StrategyActionEmailPo extends StrategyStepBasePo {
     console.log("Set Properties");
     const testFields = await helpers.getElements(By.css(`.column.is-half`));
     for (const item of testFields) {
-      const label = await helpers.getElementWithinElement(item, By.className("label"), false, false, 5000);
+      const label = await helpers.getElementWithinElement(item, By.className("label"), false, false, true, 5000);
       if ((await label.getText()).toLowerCase() === "design") {
         await this.SelectDropdownList(item);
         await this.SearchInList(properties[0]);

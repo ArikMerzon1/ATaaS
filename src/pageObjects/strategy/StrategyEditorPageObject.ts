@@ -3,6 +3,7 @@ import { By, ThenableWebDriver, until } from "selenium-webdriver";
 import helpers from "../../utils/helpers";
 import { StrategyActions } from "../../utils/Enums";
 import StrategyActionSMSPo from "./StrategyActions/StrategyActionSMSPo";
+import StrategyActionMessagePo from "./StrategyActions/StrategyActionMessagePo";
 import StrategyActionEmailPo from "./StrategyActions/StrategyActionEmailPo";
 import { IAction } from "./StrategyActions/IAction";
 import StrategyStepBasePo from "./StrategyActions/StrategyStepBasePo";
@@ -25,6 +26,17 @@ export class StrategyEditorPageObject {
     await helpers.waitForAttribute(hudButtons[2], "disabled");
     await helpers.sleep(2);
     return this;
+  }
+
+  async getErrorMsg(): Promise<string> {
+    console.log("GetErrorMsg");
+    const header = await (await helpers.getElement(By.css(".modal-card-title"))).getText();
+    await helpers.takeScreenshot("Error Msg");
+
+    const button = await helpers.getElement(By.css(".modal-card-foot .button"));
+    await button.click();
+
+    return header;
   }
 
   async SearchForAction(actionName: StrategyActions): Promise<this> {
@@ -72,6 +84,8 @@ export class StrategyEditorPageObject {
       case StrategyActions.SMS:
       case StrategyActions.PLACE_CALL:
         return container.resolve(StrategyActionSMSPo);
+      case StrategyActions.MESSAGE:
+        return container.resolve(StrategyActionMessagePo);
       case StrategyActions.EMAIL:
       case StrategyActions.LETTER:
         return container.resolve(StrategyActionEmailPo);
@@ -98,13 +112,13 @@ export class StrategyEditorPageObject {
     selectedValue: string;
   }> {
     const [conditionBuilder] = await helpers.getElements(By.css(`.condition-builder`));
-    const dropdownVariable = await helpers.getElementWithinElement(conditionBuilder, By.className("dropdown-variable"), true, false, 5000);
+    const dropdownVariable = await helpers.getElementWithinElement(conditionBuilder, By.className("dropdown-variable"), true, false, true, 5000);
     const selectedVariable = await dropdownVariable.getText();
 
-    const dropdownOperation = await helpers.getElementWithinElement(conditionBuilder, By.className("condition-dropdown"), true, false, 5000);
+    const dropdownOperation = await helpers.getElementWithinElement(conditionBuilder, By.className("condition-dropdown"), true, false, true, 5000);
     const selectedOperation = await dropdownOperation.getText();
 
-    const dropdownValue = await helpers.getElementWithinElement(conditionBuilder, operationSelector, true, false, 5000);
+    const dropdownValue = await helpers.getElementWithinElement(conditionBuilder, operationSelector, true, false, true, 5000);
     const inputElement = await helpers.getElementWithinElement(dropdownValue, By.className("input"));
     const selectedValue = await inputElement.getAttribute("value");
 
@@ -112,6 +126,33 @@ export class StrategyEditorPageObject {
       selectedVariable,
       selectedOperation,
       selectedValue,
+    };
+  }
+
+  async GetSendMessageValues(): Promise<{
+    messagingApp: string;
+    template: string;
+    locale: string;
+  }> {
+    const sendMessageEditorCssSelector = By.css(`[data-test-id="strategy-builder-step-send-message-editor"]`);
+    const [sendMessageEditor] = await helpers.getElements(sendMessageEditorCssSelector);
+
+    const messagingAppCssSelector = By.css(`[data-test-id="messaging-app-selector"]`);
+    const messagingAppSelector = await helpers.getElementWithinElement(sendMessageEditor, messagingAppCssSelector, true, false, true, 5000);
+    const messagingApp = await messagingAppSelector.getText();
+
+    const templateCssSelector = By.css(`[data-test-id="message-template-selector"]`);
+    const templateSelector = await helpers.getElementWithinElement(sendMessageEditor, templateCssSelector, true, false, true, 5000);
+    const template = await templateSelector.getText();
+
+    const localeCssSelector = By.css(`[data-test-id="message-locale-selector"]`);
+    const localeSelector = await helpers.getElementWithinElement(sendMessageEditor, localeCssSelector, true, false, true, 5000);
+    const locale = await localeSelector.getText();
+
+    return {
+      messagingApp,
+      template,
+      locale,
     };
   }
 

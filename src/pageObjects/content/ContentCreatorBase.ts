@@ -20,4 +20,11 @@ export default class ContentCreatorBase {
     const backButton = await helpers.getElement(By.css(`[data-test-id="navigation-button-label"]`));
     await backButton.click();
   }
+
+  async accessibleByAgents(check: boolean): Promise<this> {
+    console.log("AccessibleByAgents");
+    const checkBox = await helpers.getElement(By.css(`[data-test-id="agent-checkbox"]`));
+    await checkBox.click();
+    return this;
+  }
 }

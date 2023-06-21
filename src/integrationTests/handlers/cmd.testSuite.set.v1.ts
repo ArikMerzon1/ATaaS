@@ -1,8 +1,8 @@
-import logger from "@exness/logger";
-import { Handler } from "@exness/sqs-handler";
-import { isValidBySpec } from "@exness/validate";
-import { IMessageEmitter } from "@exness/emit-message";
-import ClaimSchema from "@exness/account-api/Claim.json";
+import logger from "@receeve-gmbh/logger";
+import { Handler } from "@receeve-gmbh/sqs-handler";
+import { isValidBySpec } from "@receeve-gmbh/validate";
+import { IMessageEmitter } from "@receeve-gmbh/emit-message";
+import ClaimSchema from "@receeve-gmbh/account-api/Claim.json";
 import lOmit from "lodash.omit";
 
 import { CommandTestSuiteSet } from "../../types/cmd.testSuite.set.v1";

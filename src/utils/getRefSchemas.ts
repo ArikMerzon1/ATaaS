@@ -1,20 +1,20 @@
-import { ReferencedSchemas } from "@exness/emit-message";
-import ClaimSchema from "@exness/account-api/Claim.json";
-import DebtorSchema from "@exness/account-api/Debtor.json";
-import RepaymentSchema from "@exness/account-api/Repayment.json";
-import ClaimOriginationSchema from "@exness/account-api/ClaimOrigination.json";
-import ProviderNameSchema from "@exness/payments-api/ProviderName.json";
-import LedgerEntrySchema from "@exness/account-api/LedgerEntry.json";
-import InvoiceLedgerEntrySchema from "@exness/account-api/InvoiceLedgerEntry.json";
-import FeeLedgerEntrySchema from "@exness/account-api/FeeLedgerEntry.json";
-import PaymentLedgerEntrySchema from "@exness/account-api/PaymentLedgerEntry.json";
-import AdjustmentLedgerEntrySchema from "@exness/account-api/AdjustmentLedgerEntry.json";
-import AnalyticsTinyUrlContextSchema from "@exness/landingpage-api/AnalyticsTinyUrlContext.json";
-import MandateRepresentationSchema from "@exness/payments-api/MandateRepresentation.json";
-import BankAccountMandateRepresentationSchema from "@exness/payments-api/BankAccountMandateRepresentation.json";
-import CardMandateRepresentationSchema from "@exness/payments-api/CardMandateRepresentation.json";
-import ResolutionReasonSchema from "@exness/account-api/ResolutionReason.json";
-import ProductSchema from "@exness/account-api/Product.json";
+import { ReferencedSchemas } from "@receeve-gmbh/emit-message";
+import ClaimSchema from "@receeve-gmbh/account-api/Claim.json";
+import DebtorSchema from "@receeve-gmbh/account-api/Debtor.json";
+import RepaymentSchema from "@receeve-gmbh/account-api/Repayment.json";
+import ClaimOriginationSchema from "@receeve-gmbh/account-api/ClaimOrigination.json";
+import ProviderNameSchema from "@receeve-gmbh/payments-api/ProviderName.json";
+import LedgerEntrySchema from "@receeve-gmbh/account-api/LedgerEntry.json";
+import InvoiceLedgerEntrySchema from "@receeve-gmbh/account-api/InvoiceLedgerEntry.json";
+import FeeLedgerEntrySchema from "@receeve-gmbh/account-api/FeeLedgerEntry.json";
+import PaymentLedgerEntrySchema from "@receeve-gmbh/account-api/PaymentLedgerEntry.json";
+import AdjustmentLedgerEntrySchema from "@receeve-gmbh/account-api/AdjustmentLedgerEntry.json";
+import AnalyticsTinyUrlContextSchema from "@receeve-gmbh/landingpage-api/AnalyticsTinyUrlContext.json";
+import MandateRepresentationSchema from "@receeve-gmbh/payments-api/MandateRepresentation.json";
+import BankAccountMandateRepresentationSchema from "@receeve-gmbh/payments-api/BankAccountMandateRepresentation.json";
+import CardMandateRepresentationSchema from "@receeve-gmbh/payments-api/CardMandateRepresentation.json";
+import ResolutionReasonSchema from "@receeve-gmbh/account-api/ResolutionReason.json";
+import ProductSchema from "@receeve-gmbh/account-api/Product.json";
 
 export default function getRefSchemas(): ReferencedSchemas {
   return {

@@ -59,7 +59,7 @@ export default class AssetPartnerPageObject {
       for (let i = 0; i < 15; i++) {
         string += chars[Math.floor(Math.random() * chars.length)];
       }
-      this.testEmail = `${string}@exness.com`;
+      this.testEmail = `${string}@receeve.com`;
     }
     return this.testEmail;
   }
@@ -79,7 +79,7 @@ export default class AssetPartnerPageObject {
   public async getIsSaveAndRevertButtonDisabledAfterEdit(): Promise<boolean> {
     await this.clickElement('[data-test-id="partner-details-edit-button"]');
 
-    const TEST_EMAIL = "123@exness.com";
+    const TEST_EMAIL = "123@receeve.com";
 
     const emailInput = await helpers.getElement(By.css("input"));
     await helpers.sendKeys(emailInput, TEST_EMAIL);

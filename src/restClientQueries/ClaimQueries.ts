@@ -1,37 +1,43 @@
-import { inject, injectable } from "tsyringe";
+import { Claim, Debtor } from "@receeve-gmbh/account-api/Claim";
+import { ClaimListItem } from "@receeve-gmbh/reporting-backoffice-api";
 import dummyJson from "dummy-json";
-import { Claim, Debtor } from "@exness/account-api/Claim";
-import { HttpProvider } from "../utils/httpProvider";
+import _merge from "lodash.merge";
+import { inject, injectable } from "tsyringe";
 import Helpers from "../utils/helpers";
+import { HttpProvider } from "../utils/httpProvider";
+import { DeepPartial } from "../utils/models/util";
 
 @injectable()
 export default class ClaimQueries {
   constructor(@inject(HttpProvider) private readonly httpProvider: HttpProvider) {}
 
-  async createClaim(): Promise<Response> {
+  async createClaim(claimData?: DeepPartial<Claim>): Promise<ClaimData> {
     const body = {
-      "AUT_{{guid}}": {
-        amount: 5050,
-        currency: "EUR",
-        currentDueDate: "2021-10-15",
-        originalDueDate: "2021-09-09",
-        productReference: "PRODUCT_REFERENCE_{{guid}}",
-        accountReference: "ACCOUNT_REFERENCE_{{guid}}",
-        portfolioReference: "EXTERNAL_PORTFOLIO_REFERENCE_{{guid}}",
-        totalFees: 140,
-        primaryDebtor: {
-          debtorReference: "EXTERNAL_DEBTOR_REF_{{guid}}",
-          firstName: "{{firstName}}",
-          lastName: "{{lastName}}",
-          contactInformation: {
-            email: "{{email}}",
-            country: "DE",
+      "AUT_{{guid}}": _merge(
+        {
+          amount: 5050,
+          currency: "EUR",
+          currentDueDate: "2021-10-15",
+          originalDueDate: "2021-09-09",
+          productReference: "PRODUCT_REFERENCE_{{guid}}",
+          accountReference: "ACCOUNT_REFERENCE_{{guid}}",
+          portfolioReference: "EXTERNAL_PORTFOLIO_REFERENCE_{{guid}}",
+          totalFees: 140,
+          primaryDebtor: {
+            debtorReference: "EXTERNAL_DEBTOR_REF_{{guid}}",
+            firstName: "{{firstName}}",
+            lastName: "{{lastName}}",
+            contactInformation: {
+              email: "{{email}}",
+              country: "DE",
+            },
+          },
+          meta: {
+            claimMeta1: "value1",
           },
         },
-        meta: {
-          claimMeta1: "value1",
-        },
-      },
+        claimData
+      ),
     };
 
     const bodyFormat = dummyJson.parse(JSON.stringify(body));
@@ -39,7 +45,21 @@ export default class ClaimQueries {
     const result = await this.httpProvider.post(`${clientId}/create_claims`, bodyFormat);
     const key = Object.keys(result.data)[0];
     if (result.data[key].success) {
-      return JSON.parse(JSON.stringify(result.data[key])) as Response;
+      return {
+        accountId: result.data[key].data.accountReference as string,
+        name: result.data[key].data.primaryDebtor.firstName,
+        claimListItem: {
+          clientId: process.env.TEST_CLIENT_ID,
+          externalClaimRef: result.data[key].messages[0].split(" ").pop() as string,
+          amount: result.data[key].data.amount as number,
+          totalFees: result.data[key].data.totalFees as number,
+          totalAmount: ((result.data[key].data.amount as number) + result.data[key].data.totalFees) as number,
+          currency: body["AUT_{{guid}}"].currency,
+          active: true,
+          paid: false,
+          dueDate: body["AUT_{{guid}}"].currentDueDate,
+        },
+      } as ClaimData;
     }
     throw new Error(result.data[key].messages[0]);
   }
@@ -164,4 +184,10 @@ export interface Response {
 
 export interface ResponseClaim extends Claim {
   primaryDebtor: Debtor;
+}
+
+export interface ClaimData {
+  accountId: string;
+  name: string;
+  claimListItem: ClaimListItem;
 }

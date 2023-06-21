@@ -28,14 +28,14 @@ export default class StrategyStepBasePo implements IAction {
 
   async SelectDropdownList(item: WebElement): Promise<this> {
     console.log("Select Dropdown List");
-    const continueButton = await helpers.getElementWithinElement(item, By.css(`.button.is-fullwidth.dropdown-button`), false, false, 5000);
+    const continueButton = await helpers.getElementWithinElement(item, By.css(`.button.is-fullwidth.dropdown-button`), false, false, true, 5000);
     await continueButton.click();
     return this;
   }
 
   async SearchInList(searchString: string): Promise<this> {
     console.log("Search");
-    const tooltip = await helpers.getElement(By.css(".tooltip.popover"), false, true, 5000);
+    const tooltip = await helpers.getElement(By.css(".tooltip.popover"), false, true, true, 5000);
     const input = await tooltip.findElement(By.className("input"));
     await input.clear();
     await input.sendKeys(searchString);

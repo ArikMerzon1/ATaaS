@@ -4,9 +4,10 @@ import LandingPageBuilderPageObject from "../pageObjects/content/LandingPageBuil
 import { ContentSubMenu, SidebarMenuEnum } from "../utils/Enums";
 import helpers from "../utils/helpers";
 import EmailBuilderPageObject from "../pageObjects/content/EmailBuilderPageObject";
+import MessagingBuilderPageObject from "../pageObjects/content/MessagingBuilderPageObject";
+import LetterBuilderPageObject from "../pageObjects/content/LetterBuilderPageObject";
 
-// @suite("uitests")
-@suite("contentbuilderstest")
+@suite("uitests")
 class ContentBuildersTest extends AbstractTestBase {
   @test("landingPageBuilderTest")
   @timeout(AbstractTestBase.timeOut)
@@ -30,9 +31,9 @@ class ContentBuildersTest extends AbstractTestBase {
     await helpers.takeScreenshot("landingPageListView");
   }
 
-  @test("emailbuilder")
+  @test("emailbuildertest")
   @timeout(AbstractTestBase.timeOut)
-  async emailPageBuilder(): Promise<void> {
+  async emailPageBuilderTest(): Promise<void> {
     const backoffice = await this.withWebDriver();
     await backoffice.LoginPage().Login();
     const emailBuilder: EmailBuilderPageObject = await (
@@ -49,5 +50,38 @@ class ContentBuildersTest extends AbstractTestBase {
 
     await helpers.sleep(2);
     await helpers.takeScreenshot("landingPageListView");
+  }
+
+  @test("messagebuildertest")
+  @timeout(AbstractTestBase.timeOut)
+  async messageBuilderTest(): Promise<void> {
+    const backoffice = await this.withWebDriver();
+    await backoffice.LoginPage().Login();
+    const msgBuilder: MessagingBuilderPageObject = await (
+      await backoffice.SidebarMenu().SelectTab(SidebarMenuEnum.CONTENT)
+    ).SelectFromSubMenu(ContentSubMenu.MESSAGE_BUILDER);
+
+    const msgName = `test_${helpers.getRandomNumberBetween(1000, 10000000)}`;
+    const msgCreate = await msgBuilder.createMessagingContext(msgName);
+    await (await msgCreate.setSmsSender("Twilly")).setBody("some amount: {{amount}}");
+    await msgCreate.save();
+    await msgCreate.backButton();
+
+    await msgBuilder.findMessageByName(msgName);
+    await helpers.takeScreenshot(msgName);
+  }
+
+  @test("letterbuildertest")
+  @timeout(AbstractTestBase.timeOut)
+  async letterBuilderTest(): Promise<void> {
+    const backoffice = await this.withWebDriver();
+    await backoffice.LoginPage().Login();
+    const letterBuilder: LetterBuilderPageObject = await (
+      await backoffice.SidebarMenu().SelectTab(SidebarMenuEnum.CONTENT)
+    ).SelectFromSubMenu(ContentSubMenu.LETTER_BUILDER);
+
+    await letterBuilder.createLetterContext("test_1", "Billie_2");
+
+    await helpers.takeScreenshot("letterName");
   }
 }

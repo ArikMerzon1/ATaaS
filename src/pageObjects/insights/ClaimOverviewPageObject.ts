@@ -1,20 +1,17 @@
-import { container, inject, injectable } from "tsyringe";
-import { By, ThenableWebDriver } from "selenium-webdriver";
+import { container, injectable } from "tsyringe";
+import { By } from "selenium-webdriver";
 import helpers from "../../utils/helpers";
 import ClaimPageObject from "./ClaimPageObject";
 
 @injectable()
 export class ClaimOverviewPageObject {
-  constructor(@inject("webDriver") readonly webDriver: ThenableWebDriver) {}
-
   async SearchClaim(claimID: string): Promise<this> {
     console.log(`searching for claimID: ${claimID}`);
     try {
       const searchClaim = await helpers.getElement(By.css(`[data-test-id="claim-table-insight-search-input"]`));
       await searchClaim.sendKeys(claimID);
-      await helpers.sleep(2);
-      await helpers.takeScreenshot("claim_search_results");
       if (await this.VerifyClaimInList(claimID)) console.log("ClaimID in the list");
+      await helpers.takeScreenshot("claim_search_results");
       return this;
     } catch (error) {
       throw Error(JSON.stringify(error, null, 2));

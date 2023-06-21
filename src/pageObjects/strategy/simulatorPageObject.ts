@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { By, ThenableWebDriver, until } from "selenium-webdriver";
-import { Claim } from "@exness/account-api/Claim";
+import { Claim } from "@receeve-gmbh/account-api/Claim";
 import helpers from "../../utils/helpers";
 
 @injectable()

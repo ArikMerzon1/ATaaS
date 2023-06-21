@@ -1,6 +1,6 @@
-import { Handler } from "@exness/sqs-handler";
-import { IMessageEmitter } from "@exness/emit-message";
-import logger from "@exness/logger";
+import { Handler } from "@receeve-gmbh/sqs-handler";
+import { IMessageEmitter } from "@receeve-gmbh/emit-message";
+import logger from "@receeve-gmbh/logger";
 
 import { EventTestSuiteFailed } from "../../types/event.testSuite.failed.v1";
 import EventTestSuiteFailedSchema from "../../apiMessages/event.testSuite.failed.v1.json";

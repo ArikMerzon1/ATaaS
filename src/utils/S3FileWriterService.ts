@@ -47,7 +47,6 @@ export default class S3FileWriterService {
       //   const stream = response.message.pipe(fileZ);
       //   stream.on("close", () => {
       //     try {
-      //       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       //       // @ts-ignore
       //       resolve(filePath);
       //     } catch (err) {

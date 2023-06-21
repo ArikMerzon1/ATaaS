@@ -12,7 +12,7 @@ Resources:
   PipelineStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://cicd-cloudformation-nested-stacks.s3.eu-central-1.amazonaws.com/GeneralCodePipeline.yaml
+      TemplateURL: https://cicd-cloudformation-nested-stacks.s3.eu-central-1.amazonaws.com/GeneralCodePipelineLTS.yaml
       Parameters:
         ServiceName: !Ref ServiceName
         GithubRepositoryName: !Ref GithubRepositoryName

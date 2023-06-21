@@ -18,7 +18,7 @@ export class AccountMenu implements IMenu {
       case AccountsSubMenu.CLAIM_OVERVIEW:
         selectedSubMenu = container.resolve(ClaimOverviewPageObject);
         break;
-      case AccountsSubMenu.QUEUES:
+      case AccountsSubMenu.TASKS:
         selectedSubMenu = container.resolve(AccountTaskPageObject);
         break;
       case AccountsSubMenu.ACCOUNT_MANAGEMENT:

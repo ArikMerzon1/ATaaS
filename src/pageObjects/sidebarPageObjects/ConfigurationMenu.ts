@@ -3,7 +3,7 @@ import { container, inject, injectable } from "tsyringe";
 import { IMenu } from "./IMenu";
 import { ConfigurationSubMenu } from "../../utils/Enums";
 import helpers from "../../utils/helpers";
-import GeneralConfViewPo from "../configuration/GeneralConfViewPo";
+import GeneralConfViewPageObject from "../configuration/GeneralConfViewPageObject";
 import OperationsViewPo from "../configuration/OperationsViewPo";
 import SchedulesViewPo from "../configuration/SchedulesViewPo";
 import QueuesViewPo from "../configuration/QueuesViewPo";
@@ -22,7 +22,7 @@ export default class ConfigurationMenu implements IMenu {
 
     switch (selection) {
       case ConfigurationSubMenu.GENERAL:
-        selectedSubMenu = container.resolve(GeneralConfViewPo);
+        selectedSubMenu = container.resolve(GeneralConfViewPageObject);
         break;
       case ConfigurationSubMenu.OPERATIONS:
         selectedSubMenu = container.resolve(OperationsViewPo);

@@ -10,7 +10,7 @@ export default class StrategyActionFinancialAssessmentPo extends StrategyStepBas
 
     const propFields = await helpers.getElements(By.css(`.field.mb-4`));
     for (const item of propFields) {
-      const label = await helpers.getElementWithinElement(item, By.className("label"), true, false, 5000);
+      const label = await helpers.getElementWithinElement(item, By.className("label"), true, false, true, 5000);
 
       if ((await label.getText()).toLowerCase() === "select method of communication") {
         await this.SelectDropdownList(item);

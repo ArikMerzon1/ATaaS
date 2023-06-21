@@ -14,8 +14,8 @@ export default class EmailBuilderPageObject extends ContentBuildBase {
   async createEmail(withTemplateName = "Blank template"): Promise<EmailCreatorPageObject> {
     console.log("CreateEmail");
     try {
-      await helpers.waitForElement(By.className("grid"), false, true, 8000);
-      await (await helpers.getElement(By.css('[data-test-id="bundle-create-btn"]'), false, true, 2000, 500, 20)).click();
+      await helpers.waitForElement(By.className("grid"), false, true, true, 8000);
+      await (await helpers.getElement(By.css('[data-test-id="bundle-create-btn"]'), false, true, true, 2000, 500, 20)).click();
 
       const templatesMap = new Map<string, WebElement>();
       const templates = await helpers.getElements(By.css(".design-element.column.is-4"));

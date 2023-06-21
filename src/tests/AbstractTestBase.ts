@@ -1,23 +1,24 @@
-import { container } from "tsyringe";
-import { ThenableWebDriver } from "selenium-webdriver";
-import path from "path";
-import * as fs from "fs";
 import dotenv from "dotenv";
+import * as fs from "fs";
+import path from "path";
+import { ThenableWebDriver } from "selenium-webdriver";
+import { container } from "tsyringe";
 import { v4 as uuidv4 } from "uuid";
-import Helpers from "../utils/helpers";
-import { WebDriverInit } from "../webDriver/WebDriverInit";
-import WebDriverInitOptions from "../utils/WebDriverInitOptions";
-import { SupportedBrowsers, TestExecutor } from "../utils/Enums";
-import getCurrentSpecResult from "../utils/GetCurrentSpecResult";
 import { Backoffice } from "../pageObjects/mainPageObjects/Backoffice";
-import RestClientBootstrapper from "../webDriver/RestClientBootstrapper";
 import AwsDeviceFarmSetup from "../utils/AwsDeviceFarmSetup";
+import { SupportedBrowsers, TestExecutor } from "../utils/Enums";
+import WebDriverInitOptions from "../utils/WebDriverInitOptions";
+import Helpers from "../utils/helpers";
+import RestClientBootstrapper from "../webDriver/RestClientBootstrapper";
+import { WebDriverInit } from "../webDriver/WebDriverInit";
+import { minuteToMs } from "../utils/minuteToMs";
 
 dotenv.config();
 
 export default abstract class AbstractTestBase {
   static webDriver: ThenableWebDriver;
-  static timeOut = 6 * 60 * 1000; // 6-minutes
+  static timeOut = minuteToMs(6);
+  static doubleTimeOut = minuteToMs(12);
   static backofficeInstance: Backoffice;
   private static deviceFarmInit: AwsDeviceFarmSetup;
   private static suitName = `ATaaS-${uuidv4()}`;
@@ -31,22 +32,31 @@ export default abstract class AbstractTestBase {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   before() {
     console.log("before each");
-    console.log("Test name: ", expect.getState().currentTestName);
+    console.log("Test name: ", expect.getState()?.currentTestName);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   async after() {
     console.log("after each");
-    const result = getCurrentSpecResult();
+    jest.setTimeout(AbstractTestBase.timeOut);
+
     let testResult = "passed";
-    if (result.failedExpectations.length > 0) {
-      testResult = "failed";
-      console.error(`Test finished with error :  ${result.failedExpectations[0].message}`);
-      if (AbstractTestBase.webDriver) await Helpers.takeScreenshot("test_finished_with_error");
+    const testName = expect.getState().currentTestName;
+    const match = Object.keys(global.testStatuses).find((item: string) => item === testName);
+    if (match) {
+      const testStatus = global.testStatuses[match];
+
+      if (testStatus.status === "failed" || testStatus.status === "error") {
+        testResult = "failed";
+        console.error(`Test finished with error :  ${testStatus.error?.message}`);
+        if ("webDriver" in AbstractTestBase) {
+          await Helpers.takeScreenshot("test_finished_with_error");
+        }
+      }
     }
 
     if (AbstractTestBase.backofficeInstance) {
-      if (typeof AbstractTestBase.backofficeInstance.LoginPage() !== "undefined") {
+      if (typeof AbstractTestBase.backofficeInstance.LoginPage() !== "undefined" && AbstractTestBase.backofficeInstance.LoginPage().isLoggedIn) {
         await AbstractTestBase.backofficeInstance.Logout();
       }
 
@@ -62,12 +72,6 @@ export default abstract class AbstractTestBase {
           break;
       }
 
-      // if (AbstractTestBase.deviceFarmInit !== null && AbstractTestBase.deviceFarmInit !== undefined) {
-      //   const artifacts: IAWSArtifact[] = await AbstractTestBase.deviceFarmInit.getArtifacts();
-      //   for (const artifact of artifacts) {
-      //     await Helpers.saveFile(artifact);
-      //   }
-      // }
       await AbstractTestBase.backofficeInstance.QuitWebdriver();
     }
   }

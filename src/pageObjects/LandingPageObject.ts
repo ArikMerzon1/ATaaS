@@ -13,7 +13,7 @@ export class LandingPageObject {
   async setUserName(debtorName: string): Promise<this> {
     try {
       console.log({ debtorName });
-      const firstNameElement = await helpers.getElement(By.css('[name="First Name"]'), false, false, 20000);
+      const firstNameElement = await helpers.getElement(By.css('[name="First Name"]'), false, false, true, 20000);
       await firstNameElement.sendKeys(debtorName);
       await helpers.takeScreenshot("SetUserName");
       return this;

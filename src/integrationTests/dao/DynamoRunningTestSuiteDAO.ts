@@ -1,4 +1,4 @@
-import logger from "@exness/logger";
+import logger from "@receeve-gmbh/logger";
 import { DocumentClient } from "aws-sdk/lib/dynamodb/document_client";
 
 import moment from "moment";
@@ -50,7 +50,7 @@ export default class DynamoRunningTestSuiteDAO implements IRunningTestSuiteDAO {
     const serialized = this.serialize(clientId, data);
     const { clientIdANDExternalClaimRef, stepName, ...patch } = serialized;
 
-    // Ref: https://github.com/exness/LandingPage/blob/master/ReadSide/src/dao/ReadSideDynamoDAO.ts
+    // Ref: https://github.com/receeve-gmbh/LandingPage/blob/master/ReadSide/src/dao/ReadSideDynamoDAO.ts
     let updateExpressionString = "SET";
     const expressionAttributeNames: { [s: string]: string } = {};
     const expressionAttributeValues: { [s: string]: string } = {};

@@ -24,7 +24,7 @@ export class Backoffice {
   async Logout(): Promise<void> {
     try {
       console.log("Logout");
-      await (await helpers.getElement(By.css(`[data-test-id="Logout"]`))).click();
+      await (await helpers.getElement(By.css(`[data-test-id="Logout"]`), false, false, false)).click();
       await helpers.waitForElement(By.className("login-title"));
       await helpers.sleep(1);
 

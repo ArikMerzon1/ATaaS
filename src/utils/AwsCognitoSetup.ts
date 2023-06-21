@@ -43,8 +43,8 @@ export default class AwsCognitoSetup {
       container.register("cognito", { useValue: this.cognito });
       container.register("userPoolId", { useValue: process.env.USER_POOL_ID as string });
       return container.resolve(UserCognitoDAO);
-    } catch (e) {
-      throw Error(e);
+    } catch (error) {
+      throw error;
     }
   }
 }

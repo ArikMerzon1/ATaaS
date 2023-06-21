@@ -1,6 +1,6 @@
 import dummyJson from "dummy-json";
 import { inject, injectable } from "tsyringe";
-import { ClaimWithStatus } from "@exness/account-api/ClaimDTO";
+import { ClaimWithStatus } from "@receeve-gmbh/account-api/ClaimDTO";
 
 import Helpers from "../utils/helpers";
 import { HttpProvider } from "../utils/httpProvider";
@@ -100,8 +100,8 @@ export default class AccountQueries {
       const clientId = Helpers.getValue(process.env.TEST_CLIENT_ID);
       const result = await this.httpProvider.post(`${clientId}/restructure_account_overdue_invoices`, dummyJson.parse(JSON.stringify(bodyFormat)));
       return JSON.stringify(result.data);
-    } catch (e) {
-      throw Error(e).stack;
+    } catch (error) {
+      throw (error as Error).stack;
     }
   }
 }

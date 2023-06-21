@@ -1,15 +1,19 @@
-import { IMessageEmitter } from "@exness/emit-message";
-import { QueryEventsGet } from "@exness/reporting-events-api/query.events.get.v1";
-import { EventsReponse } from "@exness/reporting-backoffice-api";
-import QueryEventsGetSchema from "@exness/reporting-events-api/query.events.get.v1.json";
-import logger from "@exness/logger";
+import { IMessageEmitter } from "@receeve-gmbh/emit-message";
+import { QueryEventsGet } from "@receeve-gmbh/reporting-events-api/query.events.get.v1";
+import { EventsReponse } from "@receeve-gmbh/reporting-backoffice-api";
+import QueryEventsGetSchema from "@receeve-gmbh/reporting-events-api/query.events.get.v1.json";
+import logger from "@receeve-gmbh/logger";
 import { inject, injectable } from "tsyringe";
+import getClaimRefSchemas from "../utils/getClaimRefSchema";
 
 const log = logger("services:EventEmitter");
 
 @injectable()
 export default class EventEmitter {
-  constructor(@inject("messageEmitter") private readonly messageEmitter: IMessageEmitter) {}
+  constructor(
+    @inject("messageEmitter") private readonly messageEmitter: IMessageEmitter,
+    @inject("reportingEventEmitter") private readonly reportingEventEmitter: IMessageEmitter
+  ) {}
 
   public async *getMessages<T>(clientId: string, filters: QueryFilters): AsyncGenerator<T[]> {
     let from = 0;
@@ -45,10 +49,17 @@ export default class EventEmitter {
         if (queryEventsGetMessage) {
           console.log("Executing getMessages", { queryEventsGetMessage });
 
-          const { response: reports } = await this.messageEmitter.emitWithResponse<QueryEventsGet, EventsReponse>(QueryEventsGetSchema, queryEventsGetMessage);
+          const { response: reports } = await this.reportingEventEmitter.emitWithResponse<QueryEventsGet, EventsReponse>(
+            QueryEventsGetSchema,
+            queryEventsGetMessage,
+            {
+              refSchemas: getClaimRefSchemas(),
+            }
+          );
 
           console.log("Direct call to Reporting-Events succeeded", {
             queryEventsGetMessage,
+            reports,
           });
 
           if (reports) {

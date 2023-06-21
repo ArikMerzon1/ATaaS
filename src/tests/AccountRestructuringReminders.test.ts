@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { suite, test, timeout } from "@testdeck/jest";
-import { ClaimWithStatus } from "@exness/account-api/ClaimDTO";
-import { AccountRestructuringNotificationSchedule } from "@exness/account-api/AccountRestructuringNotificationSchedule";
+import { ClaimWithStatus } from "@receeve-gmbh/account-api/ClaimDTO";
+import { AccountRestructuringNotificationSchedule } from "@receeve-gmbh/account-api/AccountRestructuringNotificationSchedule";
 
 import { SidebarMenuEnum, AccountsSubMenu } from "../utils/Enums";
 import AbstractTestBase from "./AbstractTestBase";
@@ -19,7 +19,7 @@ class AccountRestructuringRemindersTests extends AbstractTestBase {
     await backOffice.LoginPage().Login();
 
     const sidebar = await backOffice.SidebarMenu().SelectTab(SidebarMenuEnum.ACCOUNT);
-    const accountManagementPage: AccountOverviewPageObject = await sidebar.SelectFromSubMenu(AccountsSubMenu.accountManagement);
+    const accountManagementPage: AccountOverviewPageObject = await sidebar.SelectFromSubMenu(AccountsSubMenu.ACCOUNT_MANAGEMENT);
     await Helpers.sleep(15);
 
     await accountManagementPage.SearchAccount(accountId);

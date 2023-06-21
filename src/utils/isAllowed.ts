@@ -5,7 +5,7 @@ import { UserRoleCognito } from "./Enums";
  * ADMIN users can perform any user action
  * Users are only allowed to list users belonging to clients they have access to
  * */
-export default function (payload: { currentTargetGroups: string[]; newTargetGroups?: string[]; currentRequesterGroups: string[] }): boolean {
+export default function isAllowed(payload: { currentTargetGroups: string[]; newTargetGroups?: string[]; currentRequesterGroups: string[] }): boolean {
   const { currentRequesterGroups, currentTargetGroups, newTargetGroups = currentTargetGroups } = payload;
 
   console.log("currentRequesterGroups", { currentRequesterGroups });

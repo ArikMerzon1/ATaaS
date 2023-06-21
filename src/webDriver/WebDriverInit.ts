@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { injectable } from "tsyringe";
-import { Builder, Capabilities, ThenableWebDriver } from "selenium-webdriver";
+import { Builder, ThenableWebDriver } from "selenium-webdriver";
 import * as firefox from "selenium-webdriver/firefox";
 import * as chrome from "selenium-webdriver/chrome";
 import geckodriver from "geckodriver";
@@ -92,10 +91,6 @@ export class WebDriverInit {
 
   async lambdaTest(webDriverInitOptions: WebDriverInitOptions): Promise<void> {
     try {
-      // LAMBDA_USERNAME         = "arik.merzon"
-      // LAMBDA_KEY              = "dfJcw8Pnm4DPykwbnqGYFVo3cOOR4VIG8j3SIAGUC7vquoBERC"
-      // LAMBDA_GRID_HOST        = "hub-eu.lambdatest.com/wd/hub"
-
       const USERNAME = process.env.LAMBDA_USERNAME;
       const KEY = process.env.LAMBDA_KEY;
       const GRID_HOST = process.env.LAMBDA_GRID_HOST;
@@ -113,9 +108,9 @@ export class WebDriverInit {
               region: "eu",
               platform: "Windows 10",
               browserName: "Firefox",
-              version: "103.0",
+              version: "109.0.1",
               resolution: "1920x1080",
-              network: false,
+              network: false, // don't enable!!!
               terminal: true,
               visual: true,
               console: true,
@@ -127,7 +122,25 @@ export class WebDriverInit {
             .build();
           break;
         case "chrome":
-          this.driver = new Builder().usingServer(serverPath).forBrowser(webDriverInitOptions.browser).withCapabilities(Capabilities.chrome()).build();
+          this.driver = new Builder()
+            .usingServer(serverPath)
+            .forBrowser(webDriverInitOptions.browser)
+            .withCapabilities({
+              region: "eu",
+              platform: "Windows 10",
+              browserName: "chrome",
+              version: "latest",
+              resolution: "1920x1080",
+              network: false, // don't enable!!!
+              terminal: true,
+              visual: true,
+              console: true,
+              video: true,
+              name: expect.getState().currentTestName,
+              build: `${webDriverInitOptions.suitName}`,
+              selenium_version: "4.1.2",
+            })
+            .build();
           break;
         default:
           console.error("unknown browser type!!!");
